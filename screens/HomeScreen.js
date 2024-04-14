@@ -1,3 +1,4 @@
+//HomeScreen.js
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, FlatList, TouchableOpacity, Button } from 'react-native';
@@ -32,9 +33,9 @@ const HomeScreen = ({ navigation }) => {
 
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('DetailProductScreen', { productId: item._id })}>
+    
       <Product product={item} />
-    </TouchableOpacity>
+    
   );
 
   const CombinedHeader = () => (
@@ -57,7 +58,7 @@ const HomeScreen = ({ navigation }) => {
             keyExtractor={(item) => item._id}
             renderItem={renderItem}
             ListHeaderComponent={CombinedHeader}
-            numColumns={2}
+            numColumns={1}
           />
         )
       )}

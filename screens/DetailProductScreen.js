@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, Image, ScrollView, Button, SafeAreaView } from 'react-native';
 import { listProductDetails } from '../store/actions/productActions';
@@ -46,18 +46,16 @@ function DetailProductScreen({ navigation, route }) {
             <Text style={styles.productName}>{product.name}</Text>
             <View style={styles.rating}>
               <Rating value={product.rating} />
-              <Text style={styles.rating}>{`${product.numReviews} reviews`}</Text>
+              <Text style={styles.rating}>{`${product.numReviews} Pistas`}</Text>
             </View>
-            <Text style={styles.productPrice}>Precio: €{product.price}</Text>
+            <Text style={styles.productPrice}>Recompensa: €{product.price}</Text>
             <Text style={styles.productDescription}>Descripción: {product.description}</Text>
             
               <View style={styles.quantityContainer}>
-                <Text style={styles.productDescription}>Selecciona la cantidad:</Text>
-
                 <View style={styles.buttonContainer}>
                   <View style={styles.roundedButton}>
                     <Button
-                      title="Añadir a la cesta"
+                      title="Añadir a mi lista"
                       onPress={() => handleAddToCart()}
                     />
                   </View>

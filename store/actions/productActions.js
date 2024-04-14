@@ -13,17 +13,25 @@ import {
 } from '../constants/productConstants';
 
 export const listProducts = (keyword = '', page = 1) => async (dispatch) => {
-    console.log("ip: ", Config.API_BASE_URL);
+    //console.log("ip: ", Config.API_BASE_URL);
     try {
         dispatch({ type: PRODUCT_LIST_REQUEST })
         const url = `${Config.API_BASE_URL}/api/products/?${keyword ? `keyword=${keyword}` : ''}&page=${page}`;
-        const { data } = await axios.get(url);
+        //console.log("URL de la solicitud:", url);
 
-        // Agregar la URL completa a cada imagen de producto
+        const { data } = await axios.get(url);
+        console.log("Datos recibidos:", data);
+
+        // Corrección en la transformación de imágenes: Asumiendo que cada producto tiene un array de imágenes
         const productsWithFullImageURL = data.products.map(product => ({
             ...product,
-            image: `${Config.API_BASE_URL}${product.image}`
+            images: product.images.map(image => ({
+                ...image,
+                image: `${Config.API_BASE_URL}${image.image}`
+            }))
         }));
+
+        //console.log("Productos con URLs de imágenes completas:", productsWithFullImageURL); // Log del nuevo array de productos
 
         dispatch({
             type: PRODUCT_LIST_SUCCESS,
@@ -33,6 +41,7 @@ export const listProducts = (keyword = '', page = 1) => async (dispatch) => {
             }
         })
     } catch (error) {
+        //console.error("Error en listProducts:", error); // Log de cualquier error que ocurra durante la solicitud o transformación de datos
         dispatch({
             type: PRODUCT_LIST_FAIL,
             payload: error.response && error.response.data.detail

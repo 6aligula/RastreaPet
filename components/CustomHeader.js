@@ -31,7 +31,7 @@ const CustomHeader = ({ locationHome, navigation }) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => navigation.navigate('CartScreen')} style={styles.cartButton}>
-                    <Icon name="cart" size={24} color="#fff" />
+                    <Icon name="paw" size={24} color="#fff" />
                     <View style={styles.cartItemCountContainer}>
                         <Text style={styles.cartItemCount}>{totalItems}</Text>
                     </View>
