@@ -25,17 +25,39 @@ const cartPersistConfig = {
     whitelist: ['cartItems']
 };
 
+const productListPersistConfig = {
+    key: 'productList',
+    storage: AsyncStorage,
+    whitelist: ['products', 'pages', 'page']
+};
+
+const productDetailsPersistConfig = {
+    key: 'productDetails',
+    storage: AsyncStorage,
+    blacklist: ['loading', 'error']  //excluyendo estados de carga y errores
+};
+
+
 const userPersistConfig = {
     key: 'user',
     storage: EncryptedStorage,
     whitelist: ['userInfo', 'userDetails']
 };
 
+// AsyncStorage.getAllKeys((err, keys) => {
+//     AsyncStorage.multiGet(keys, (error, stores) => {
+//         stores.map((result, i, store) => {
+//             console.log({ [store[i][0]]: store[i][1] });
+//             return true;
+//         });
+//     });
+// });
+
 const rootReducer = combineReducers({
     cart: persistReducer(cartPersistConfig, cartReducer),
-    productList: productListReducers,
-    productDetails: productDetailsReducers,
-    userLogin : persistReducer(userPersistConfig, userLoginReducer),
+    productList: persistReducer(productListPersistConfig, productListReducers),
+    productDetails: persistReducer(productDetailsPersistConfig, productDetailsReducers),
+    userLogin: persistReducer(userPersistConfig, userLoginReducer),
     userRegister: userRegisterReducer,
     userDetails: userDetailsReducer,
     userUpdateProfile : userUpdateProfileReducer,
