@@ -12,7 +12,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { validateEmail } from '../functions/functions';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({ navigation, route }) => {
+    const message = route.params?.from ? "Para proceder con la publicación, por favor inicia sesión o registrate" : "";
    
     useAndroidBackButton(navigation, () => {
         navigation.navigate('HomeScreen');
@@ -58,6 +59,7 @@ const LoginScreen = ({ navigation }) => {
                 <View style={styles.container}>
                     <Text style={styles.title}>Iniciar Sesión</Text>
 
+                    {message && <Message variant='info'>{message}</Message>}
                     {error && <Message variant='danger'>{error}</Message>}
                     {loading && <Loader />}
 

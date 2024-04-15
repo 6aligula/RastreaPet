@@ -25,7 +25,7 @@ function ShippingForm({ navigation }) {
 
     useEffect(() => {
         if (!userInfo) {
-            navigation.navigate('LoginScreen');
+            navigation.navigate('LoginScreen', {from: 'ShippingForm'});
         }
 
     }, [dispatch,  userInfo, navigation]);
