@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    margin: 10,
+    margin: 5,
   },
   container: {
     margin: 20,

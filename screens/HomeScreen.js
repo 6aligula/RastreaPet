@@ -1,5 +1,5 @@
 //HomeScreen.js
-import React, {useEffect} from 'react';
+import React, {useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, FlatList, TouchableOpacity, Button } from 'react-native';
 import { useFocusEffect } from '@react-navigation/core';
@@ -17,6 +17,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import NetInfo from "@react-native-community/netinfo";
 
 const HomeScreen = ({ navigation }) => {
+  const [isConnected, setIsConnected] = useState(true);
+
   useAndroidBackButton(navigation, () => {
     BackHandler.exitApp();
   });
@@ -24,28 +26,20 @@ const HomeScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
   const productList = useSelector((state) => state.productList);
-  const { error, loading, products, page, pages, _persist } = productList;
-
-  // // Efecto para manejar la rehidratación
-  // useEffect(() => {
-  //   if (_persist && _persist.rehydrated) {
-  //     // Los datos han sido rehidratados, puedes decidir recargar o solo re-renderizar
-  //     console.log("Datos rehidratados, verificando productos...");
-  //     if (!products || products.length === 0) {
-  //       console.log("No hay productos cargados post-rehidratación, recargando...");
-  //       dispatch(listProducts('', 1)); // Intenta recargar los datos si están vacíos
-  //     }
-  //   }
-  // }, [_persist]);
+  const { error, loading, products, page, pages } = productList;
 
   useFocusEffect(
     React.useCallback(() => {
-      NetInfo.fetch().then(state => {
+      const checkConnectivityAndLoadData = async () => {
+        const state = await NetInfo.fetch();
+        setIsConnected(state.isConnected);
         if (state.isConnected) {
           dispatch(listProducts('', 1));
-          console.log("Conectado a internet?", state.isConnected);
         }
-      });
+        
+      };
+      
+      checkConnectivityAndLoadData();
     }, [dispatch])
   );
 
@@ -61,16 +55,14 @@ const HomeScreen = ({ navigation }) => {
     </View>
   );
   
-  // console.log("Productos: ", products);
-  // console.log("Error: ", error);
 
   return (
     <SafeAreaView style={[styles.safeArea, stylesGlobal.background]}>
+      {!isConnected && <Message variant="danger">No hay conexión a internet.</Message>}
       {loading ? (
         <Loader />
       ) : error ? (
         <>
-          <Message variant="danger">{error}</Message>
           {products && products.length > 0 && (
             <FlatList
               data={products}
