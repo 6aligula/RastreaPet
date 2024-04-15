@@ -6,8 +6,6 @@ import logo from '../images/logo.webp';
 import styles from './styles/CustomHeaderStyle';
 
 const CustomHeader = ({ locationHome, navigation }) => {
-    const cartItems = useSelector((state) => state.cart.cartItems);
-    const totalItems = cartItems.reduce((acc, item) => acc + item.qty, 0);
 
     const userLogin = useSelector((state) => state.userLogin);
     const {userInfo} = userLogin;
@@ -30,11 +28,9 @@ const CustomHeader = ({ locationHome, navigation }) => {
                     {userInfo && <Text style={styles.usernameText}>{userInfo.name}</Text>}
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => navigation.navigate('CartScreen')} style={styles.cartButton}>
-                    <Icon name="paw" size={24} color="#fff" />
-                    <View style={styles.cartItemCountContainer}>
-                        <Text style={styles.cartItemCount}>{totalItems}</Text>
-                    </View>
+                <TouchableOpacity onPress={() => navigation.navigate('ShippingForm')} style={styles.cartButton}>
+                    <Icon name="search" size={24} color="#fff" />
+                    <Text>Anunciar</Text>
                 </TouchableOpacity>
 
             </View>

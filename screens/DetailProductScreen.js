@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { View, Text, ScrollView, Button, SafeAreaView } from 'react-native';
+import { View, Text, ScrollView, SafeAreaView } from 'react-native';
 import { listProductDetails } from '../store/actions/productActions';
 //import { addToCart } from '../store/actions/cartActions';
 import Rating from '../components/Rating';

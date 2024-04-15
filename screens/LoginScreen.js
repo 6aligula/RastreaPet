@@ -1,3 +1,4 @@
+// LoginScreen.js
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';

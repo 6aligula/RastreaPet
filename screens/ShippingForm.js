@@ -1,3 +1,4 @@
+//ShippingForm.js
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Text, Button, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
@@ -18,6 +19,17 @@ const provincesAndCities = arbol.reduce((result, region) => {
 
 
 function ShippingForm({ navigation }) {
+
+    const userLogin = useSelector(state => state.userLogin);
+    const { userInfo } = userLogin;
+
+    useEffect(() => {
+        if (!userInfo) {
+            navigation.navigate('LoginScreen');
+        }
+
+    }, [dispatch,  userInfo, navigation]);
+
     useAndroidBackButton(navigation);
     const cart = useSelector(state => state.cart);
     const { shippingAddress } = cart;
