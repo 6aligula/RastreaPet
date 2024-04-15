@@ -2,11 +2,11 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/core';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
-import Product from '../components/Product';
+import Product from '../components/Pet';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import styles from './styles/SearchStyles';
-import { listProducts } from '../store/actions/productActions';
+import { listProducts } from '../store/actions/petActions';
 import { useColorSchemeContext } from '../ColorSchemeContext';
 import useAndroidBackButton from '../myHooks/useAndroidBackButton'
 

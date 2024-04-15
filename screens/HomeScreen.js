@@ -1,13 +1,13 @@
 //HomeScreen.js
 import React, {useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { View, Text, FlatList, TouchableOpacity, Button } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { useFocusEffect } from '@react-navigation/core';
-import Product from '../components/Product';
+import Pet from '../components/Pet';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate';
-import { listProducts } from '../store/actions/productActions';
+import { listPets } from '../store/actions/petActions';
 import SearchBox from '../components/SearchBox'
 import styles from './styles/HomeStyles';
 import useAndroidBackButton from '../myHooks/useAndroidBackButton';
@@ -25,8 +25,8 @@ const HomeScreen = ({ navigation }) => {
   const { stylesGlobal } = useColorSchemeContext();
 
   const dispatch = useDispatch();
-  const productList = useSelector((state) => state.productList);
-  const { error, loading, products, page, pages } = productList;
+  const petList = useSelector((state) => state.petList);
+  const { error, loading, pets, page, pages } = petList;
 
   useFocusEffect(
     React.useCallback(() => {
@@ -34,7 +34,7 @@ const HomeScreen = ({ navigation }) => {
         const state = await NetInfo.fetch();
         setIsConnected(state.isConnected);
         if (state.isConnected) {
-          dispatch(listProducts('', 1));
+          dispatch(listPets('', 1));
         }
         
       };
@@ -44,7 +44,7 @@ const HomeScreen = ({ navigation }) => {
   );
 
   const renderItem = ({ item }) => (
-    <Product product={item} onDetailsPress={() => navigation.navigate('DetailProductScreen', { productId: item._id })} />
+    <Pet pet={item} onDetailsPress={() => navigation.navigate('DetailPetScreen', { petId: item._id })} />
   );
 
 
@@ -63,23 +63,23 @@ const HomeScreen = ({ navigation }) => {
         <Loader />
       ) : error ? (
         <>
-          {products && products.length > 0 && (
+          {pets && pets.length > 0 && (
             <FlatList
-              data={products}
+              data={pets}
               keyExtractor={(item) => item._id.toString()}
               renderItem={renderItem}
               ListHeaderComponent={CombinedHeader}
               numColumns={1}
             />
           )}
-          <TouchableOpacity onPress={() => dispatch(listProducts('', 1))}>
+          <TouchableOpacity onPress={() => dispatch(listPets('', 1))}>
             <Text style={styles.retryButtonText}>Intentar de nuevo</Text>
           </TouchableOpacity>
         </>
       ) : (
-        products && (
+        pets && (
           <FlatList
-            data={products}
+            data={pets}
             keyExtractor={(item) => item._id.toString()}
             renderItem={renderItem}
             ListHeaderComponent={CombinedHeader}
@@ -87,11 +87,11 @@ const HomeScreen = ({ navigation }) => {
           />
         )
       )}
-      {!loading && products && products.length > 0 && (
+      {!loading && pets && pets.length > 0 && (
         <Paginate
           pages={pages}
           page={page}
-          onPageChange={(selectedPage) => dispatch(listProducts("", selectedPage))}
+          onPageChange={(selectedPage) => dispatch(listPets("", selectedPage))}
         />
       )}
     </SafeAreaView>

@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { listProducts } from '../store/actions/productActions';
+import { listProducts } from '../store/actions/petActions';
 
 const useSearch = (searchKeyword, setSearchKeyword, page) => {
     const dispatch = useDispatch();

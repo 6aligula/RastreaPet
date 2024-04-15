@@ -28,7 +28,7 @@ const CustomHeader = ({ locationHome, navigation }) => {
                     {userInfo && <Text style={styles.usernameText}>{userInfo.name}</Text>}
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => navigation.navigate('ShippingForm')} style={styles.cartButton}>
+                <TouchableOpacity onPress={() => navigation.navigate('FormScreen')} style={styles.cartButton}>
                     <Icon name="search" size={24} color="#fff" />
                     <Text>Anunciar</Text>
                 </TouchableOpacity>

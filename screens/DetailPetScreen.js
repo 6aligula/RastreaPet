@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, ScrollView, SafeAreaView } from 'react-native';
-import { listProductDetails } from '../store/actions/productActions';
+import { listPetDetails } from '../store/actions/petActions';
 import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import styles from './styles/DetailProductStyle';
+import styles from './styles/DetailPetStyle';
 import CarouselComponent from '../components/Carousel';
 import useAndroidBackButton from '../myHooks/useAndroidBackButton';
 import { useColorSchemeContext } from '../ColorSchemeContext';
@@ -18,24 +18,24 @@ function DetailProductScreen({ navigation, route }) {
 
   useAndroidBackButton(navigation);
 
-  const { productId } = route.params;
+  const { petId } = route.params;
   const dispatch = useDispatch();
 
-  const productDetails = useSelector((state) => state.productDetails);
-  const { error, loading, product } = productDetails;
+  const petDetails = useSelector((state) => state.petDetails);
+  const { error, loading, pet } = petDetails;
 
   useEffect(() => {
     const checkConnectivityAndLoadData = async () => {
       const state = await NetInfo.fetch();
       setIsConnected(state.isConnected);
       if (state.isConnected) {
-        dispatch(listProductDetails(productId));
+        dispatch(listPetDetails(petId));
         //console.log("Conectado a internet?", state.isConnected);
       }
       
     };
     checkConnectivityAndLoadData();
-  }, [dispatch, productId]);
+  }, [dispatch, petId]);
 
   return (
     <SafeAreaView style={[stylesGlobal.background, styles.safeAreaContainer]}>
@@ -45,9 +45,9 @@ function DetailProductScreen({ navigation, route }) {
           <Loader />
         ) : error ? (
           <>
-          {product && product.length > 0 && (
+          {pet && pet.length > 0 && (
             <FlatList
-              data={product}
+              data={pet}
               keyExtractor={(item) => item._id.toString()}
               renderItem={renderItem}
               ListHeaderComponent={CombinedHeader}
@@ -60,19 +60,27 @@ function DetailProductScreen({ navigation, route }) {
           <View style={styles.container}>
             <Text style={[stylesGlobal.text, styles.title]}>Detalles de la mascota</Text>
 
-            {product.images && product.images.length ? (
-              <CarouselComponent images={product.images.map(img => img.image)} />
+            {pet.images && pet.images.length ? (
+              <CarouselComponent images={pet.images.map(img => img.image)} />
             ) : (
               <Text>No Images Available</Text>
             )}
 
-            <Text style={[stylesGlobal.text ,styles.productName]}>{product.name}</Text>
+            <Text style={styles.productPrice}>Recompensa: €{pet.reward}</Text>
+            <Text style={[stylesGlobal.text ,styles.productName]}>Nombre: {pet.name}</Text>
+            <Text style={[stylesGlobal.text, styles.productDescription]}>Tipo: {pet.category}</Text>
+            <Text style={[stylesGlobal.text, styles.productDescription]}>Raza: {pet.breed}</Text>
+            <Text style={[stylesGlobal.text, styles.productDescription]}>Edad: {pet.age} años</Text>
+            <Text style={[stylesGlobal.text, styles.productDescription]}>Fecha cuando se perdio: {new Date(pet.missingDate).toLocaleDateString()} </Text>
+            <Text style={[stylesGlobal.text, styles.productDescription]}>Se perdio en : {pet.city}, {pet.province}, {pet.address}</Text>
+
             <View style={styles.rating}>
-              <Rating value={product.rating} />
-              <Text style={styles.rating}>{`${product.numReviews} Pistas`}</Text>
+              <Rating value={pet.rating} />
+              <Text style={styles.rating}>{`${pet.numTrail} Pistas`}</Text>
             </View>
-            <Text style={styles.productPrice}>Recompensa: €{product.price}</Text>
-            <Text style={[stylesGlobal.text, styles.productDescription]}>Descripción: {product.description}</Text>
+            
+            <Text style={[stylesGlobal.text, styles.productDescription]}>Descripción: {pet.description}</Text>
+       
 
           </View>
         )}

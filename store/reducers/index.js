@@ -3,9 +3,10 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import { combineReducers } from 'redux';
 import { cartReducer } from './cartReducers';
 import {
-    productListReducers,
-    productDetailsReducers,
-} from './productReducers';
+    petListReducers,
+    petDetailsReducers,
+    petCreateReducer
+} from './petReducers';
 import {
     userLoginReducer,
     userRegisterReducer,
@@ -25,24 +26,24 @@ const cartPersistConfig = {
     whitelist: ['cartItems']
 };
 
-const productListPersistConfig = {
-    key: 'productList',
+const petListPersistConfig = {
+    key: 'petList',
     storage: AsyncStorage,
     whitelist: ['products', 'pages', 'page']
 };
 
-const productDetailsPersistConfig = {
-    key: 'productDetails',
+const petDetailsPersistConfig = {
+    key: 'pettDetails',
     storage: AsyncStorage,
-    blacklist: ['loading', 'error']  //excluyendo estados de carga y errores
+    blacklist: ['loading', 'error']
 };
-
 
 const userPersistConfig = {
     key: 'user',
     storage: EncryptedStorage,
     whitelist: ['userInfo', 'userDetails']
 };
+
 
 // AsyncStorage.getAllKeys((err, keys) => {
 //     AsyncStorage.multiGet(keys, (error, stores) => {
@@ -55,8 +56,9 @@ const userPersistConfig = {
 
 const rootReducer = combineReducers({
     cart: persistReducer(cartPersistConfig, cartReducer),
-    productList: persistReducer(productListPersistConfig, productListReducers),
-    productDetails: persistReducer(productDetailsPersistConfig, productDetailsReducers),
+    petList: persistReducer(petListPersistConfig, petListReducers),
+    petDetails: persistReducer(petDetailsPersistConfig, petDetailsReducers),
+    petCreate: petCreateReducer,
     userLogin: persistReducer(userPersistConfig, userLoginReducer),
     userRegister: userRegisterReducer,
     userDetails: userDetailsReducer,

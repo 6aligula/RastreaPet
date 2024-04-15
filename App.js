@@ -5,16 +5,16 @@ import { Provider } from 'react-redux';
 import { ColorSchemeProvider } from './ColorSchemeContext';
 import CustomHeader from './components/CustomHeader';
 import HomeScreen from './screens/HomeScreen';
-import DetailProductScreen from './screens/DetailProductScreen';
+import DetailPetScreen from './screens/DetailPetScreen';
 import SearchScreen from './screens/SearchScreen';
 import CartScreen from './screens/CartScreen';
-import ShippingForm from './screens/ShippingForm';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import MyOrdersScreen from './screens/MyOrdersScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
+import FormScreen from './screens/FormScreen';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './store';
 import Loader from './components/Loader';
@@ -38,8 +38,8 @@ const App = () => {
                   })}
                 />
                 <Stack.Screen
-                  name="DetailProductScreen"
-                  component={DetailProductScreen}
+                  name="DetailPetScreen"
+                  component={DetailPetScreen}
                   options={({ navigation }) => ({
                     header: () => <CustomHeader navigation={navigation} />,
                   })}
@@ -54,13 +54,6 @@ const App = () => {
                 <Stack.Screen
                   name="CartScreen"
                   component={CartScreen}
-                  options={({ navigation }) => ({
-                    header: () => <CustomHeader navigation={navigation} />,
-                  })}
-                />
-                <Stack.Screen
-                  name="ShippingForm"
-                  component={ShippingForm}
                   options={({ navigation }) => ({
                     header: () => <CustomHeader navigation={navigation} />,
                   })}
@@ -103,6 +96,13 @@ const App = () => {
                 <Stack.Screen
                   name="OrderScreen"
                   component={OrderScreen}
+                  options={({ navigation }) => ({
+                    header: () => <CustomHeader navigation={navigation} />,
+                  })}
+                />
+                <Stack.Screen
+                  name="FormScreen"
+                  component={FormScreen}
                   options={({ navigation }) => ({
                     header: () => <CustomHeader navigation={navigation} />,
                   })}
