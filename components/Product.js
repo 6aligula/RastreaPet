@@ -9,7 +9,8 @@ import { useColorSchemeContext } from '../ColorSchemeContext';
 const Product = ({ product, onDetailsPress }) => {
   const { stylesGlobal } = useColorSchemeContext();
   return (
-    <View style={[styles.row, stylesGlobal.background]}>
+    <View style={[stylesGlobal.background, styles.row]}>
+      <Text style={styles.price}>Recompensa {product.price}€</Text>
 
       {product.images && product.images.length ? (
         <CarouselComponent images={product.images.map(img => img.image)} />
@@ -17,10 +18,9 @@ const Product = ({ product, onDetailsPress }) => {
         <Text>No Images Available</Text>
       )}
 
-      <Text style={[styles.title, stylesGlobal.text]}>{product.name}</Text>
+      <Text style={[stylesGlobal.text, styles.title]}>Nombre: {product.name}</Text>
       <Rating value={product.rating} />
       <Text style={stylesGlobal.text}>{`${product.numReviews} Pista`}</Text>
-      <Text style={styles.price}>${product.price}</Text>
 
       <TouchableOpacity onPress={onDetailsPress} style={styles.detailsButton}>
         <Text style={styles.detailsButtonText}>Ver detalles</Text>

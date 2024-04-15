@@ -10,7 +10,8 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ccc',
         paddingVertical: 10,
         margin: 5,
-        width: screenWidth -10,  // Usamos el ancho completo de la pantalla
+        width: screenWidth -10,
+        alignItems: 'center',
     },
 
     imageContainer: {
@@ -23,17 +24,17 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',
         height: '100%',
-        resizeMode: 'cover',  // Podrías cambiar a 'contain' si no deseas que la imagen se recorte
+        resizeMode: 'cover',
+        textAlign: 'center',
     },
     title: {
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: 'bold',
-        marginBottom: 5,
-        width: '100%',  // Asegúrate de que el título también ocupe todo el ancho
+        
     },
 
     price: {
-        fontSize: 18,
+        fontSize: 22,
         fontWeight: 'bold',
         color: '#27ae60',
     },

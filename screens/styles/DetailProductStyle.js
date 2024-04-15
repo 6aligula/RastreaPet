@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: 16,
         marginBottom: 8,
-        color: '#2c3e50',
     },
     productPrice: {
         fontSize: 20,
@@ -28,7 +27,6 @@ const styles = StyleSheet.create({
     },
     productDescription: {
         fontSize: 16,
-        color: '#34495e',
         marginBottom: 16,
     },
     productAvailability: {
@@ -44,7 +42,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: 16,
         marginBottom: 8,
-        color: '#2c3e50',
         textAlign: 'center',
     },
     buttonContainer: {
