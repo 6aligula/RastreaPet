@@ -20,7 +20,7 @@ export const listProducts = (keyword = '', page = 1) => async (dispatch) => {
         //console.log("URL de la solicitud:", url);
 
         const { data } = await axios.get(url);
-        console.log("Datos recibidos:", data);
+        //console.log("Datos recibidos:", data);
 
         // Corrección en la transformación de imágenes: Asumiendo que cada producto tiene un array de imágenes
         const productsWithFullImageURL = data.products.map(product => ({
@@ -53,14 +53,17 @@ export const listProducts = (keyword = '', page = 1) => async (dispatch) => {
 
 export const listProductDetails = (id) => async (dispatch) => {
     try {
-        dispatch({ type: PRODUCT_DETAILS_REQUEST })
+        dispatch({ type: PRODUCT_DETAILS_REQUEST });
 
-        const { data } = await axios.get(`${Config.API_BASE_URL}/api/products/${id}/`)
+        const { data } = await axios.get(`${Config.API_BASE_URL}/api/products/${id}/`);
 
-        // Agregar la URL completa a la imagen del producto
+        // Asumimos que cada producto tiene un array de imágenes y agregamos la URL completa
         const productWithFullImageURL = {
             ...data,
-            image: `${Config.API_BASE_URL}${data.image.startsWith('/') ? '' : '/'}${data.image}`
+            images: data.images.map(image => ({
+                ...image,
+                image: `${Config.API_BASE_URL}${image.image.startsWith('/') ? '' : '/'}${image.image}`
+            }))
         };
 
         dispatch({

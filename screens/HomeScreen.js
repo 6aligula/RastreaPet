@@ -19,12 +19,12 @@ const HomeScreen = ({ navigation }) => {
   useAndroidBackButton(navigation, () => {
     BackHandler.exitApp();
   });
-  const {stylesGlobal}  = useColorSchemeContext();
+  const { stylesGlobal } = useColorSchemeContext();
 
   const dispatch = useDispatch();
   const productList = useSelector((state) => state.productList);
   const { error, loading, products, page, pages } = productList;
-  
+
   useFocusEffect(
     React.useCallback(() => {
       dispatch(listProducts('', 1));
@@ -33,10 +33,9 @@ const HomeScreen = ({ navigation }) => {
 
 
   const renderItem = ({ item }) => (
-    
-      <Product product={item} />
-    
+    <Product product={item} onDetailsPress={() => navigation.navigate('DetailProductScreen', { productId: item._id })} />
   );
+
 
   const CombinedHeader = () => (
     <View style={styles.container}>
@@ -55,7 +54,7 @@ const HomeScreen = ({ navigation }) => {
         products && (
           <FlatList
             data={products}
-            keyExtractor={(item) => item._id}
+            keyExtractor={(item) => item._id.toString()}
             renderItem={renderItem}
             ListHeaderComponent={CombinedHeader}
             numColumns={1}

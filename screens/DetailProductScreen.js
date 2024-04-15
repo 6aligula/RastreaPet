@@ -7,6 +7,7 @@ import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import styles from './styles/DetailProductStyle';
+import CarouselComponent from '../components/Carousel';
 import useAndroidBackButton from '../myHooks/useAndroidBackButton';
 
 function DetailProductScreen({ navigation, route }) {
@@ -37,10 +38,11 @@ function DetailProductScreen({ navigation, route }) {
         ) : (
           <View style={styles.container}>
             <Text style={[styles.title]}>Detalles de la mascota</Text>
-            {product && product.image ? (
-              <Image source={{ uri: product.image }} style={styles.productImage} />
+
+            {product.images && product.images.length ? (
+              <CarouselComponent images={product.images.map(img => img.image)} />
             ) : (
-              <Loader />
+              <Text>No Images Available</Text>
             )}
 
             <Text style={styles.productName}>{product.name}</Text>
@@ -50,18 +52,18 @@ function DetailProductScreen({ navigation, route }) {
             </View>
             <Text style={styles.productPrice}>Recompensa: €{product.price}</Text>
             <Text style={styles.productDescription}>Descripción: {product.description}</Text>
-            
-              <View style={styles.quantityContainer}>
-                <View style={styles.buttonContainer}>
-                  <View style={styles.roundedButton}>
-                    <Button
-                      title="Añadir a mi lista"
-                      onPress={() => handleAddToCart()}
-                    />
-                  </View>
+
+            <View style={styles.quantityContainer}>
+              <View style={styles.buttonContainer}>
+                <View style={styles.roundedButton}>
+                  <Button
+                    title="Añadir a mi lista"
+                    onPress={() => handleAddToCart()}
+                  />
                 </View>
               </View>
-          
+            </View>
+
           </View>
         )}
       </ScrollView>

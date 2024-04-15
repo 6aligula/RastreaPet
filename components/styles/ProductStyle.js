@@ -37,6 +37,16 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#27ae60',
     },
+    detailsButton: {
+        padding: 10,
+        backgroundColor: '#007BFF',
+        borderRadius: 5,
+        marginTop: 10,
+      },
+      detailsButtonText: {
+        color: 'white',
+        textAlign: 'center',
+      },
 });
 
 export default styles;
