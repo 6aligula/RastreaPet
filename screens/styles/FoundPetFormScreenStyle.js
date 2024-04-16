@@ -36,10 +36,13 @@ const ShippingStyles = StyleSheet.create({
     },
     buttonContainer: {
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
         alignItems: 'center',
+        marginHorizontal: 20, // Ajusta según necesites
     },
     roundedButton: {
+        flex: 1, // Esto hace que cada botón tome el mismo espacio disponible
+        marginHorizontal: 10, // Añade un margen horizontal para separar los botones
         borderRadius: 50,
         overflow: 'hidden',
     },

@@ -1,17 +1,45 @@
 // FoundPetFormScreen.js
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, SafeAreaView } from 'react-native';
-import {launchCamera} from 'react-native-image-picker';
+import { View, TextInput, Button, Text, SafeAreaView, Image } from 'react-native';
+import { launchCamera } from 'react-native-image-picker';
 import Geolocation from 'react-native-geolocation-service';
 import { ScrollView } from 'react-native-gesture-handler';
-import useCameraPermissions  from '../myHooks/useCameraPermissions';
+import useCameraPermissions from '../myHooks/useCameraPermissions';
+import useLocationPermissions from '../myHooks/useLocationPermissions';
 import Message from '../components/Message';
 import styles from './styles/FoundPetFormScreenStyle';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 function FoundPetFormScreen() {
     const [emailValid, setEmailValid] = useState(true);
     const [errorCameraPermission, setErrorCameraPermission] = useState(false);
     const { requestCameraPermission } = useCameraPermissions();
+    const { requestLocationPermission } = useLocationPermissions();
+    const [images, setImages] = useState([]);
+
+    //Funcion para seleccionar imagenes
+    const handleSelectImages = () => {
+        const options = {
+            mediaType: 'photo',
+            quality: 1,
+            selectionLimit: 0,  // 0 para múltiples selecciones
+        };
+
+        launchImageLibrary(options, (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.errorCode) {
+                console.log('ImagePicker Error: ', response.errorMessage);
+            } else {
+                const newImages = response.assets.map(asset => ({
+                    uri: asset.uri,
+                    type: asset.type,
+                    name: asset.fileName
+                }));
+                setImages(prevImages => [...prevImages, ...newImages]);
+            }
+        });
+    };
 
     // Función para abrir la cámara con permisos
     const openCameraWithPermission = async () => {
@@ -27,24 +55,18 @@ function FoundPetFormScreen() {
             setErrorCameraPermission(true);
             console.log('No se otorgaron los permisos para la cámara');
         }
-    };   
-
-    const [formData, setFormData] = useState({
-        description: '',
-        address: '',
-        email: '',
-        mobil: '',
-    });
-
-    const handleSubmit = () => {
-        if (validateFields()) {
-            console.log("data", formData)
-            dispatch(createPet(formData, images));
-            //navigation.navigate('PlaceOrderScreen');
-            return;
+    };
+    // Funcion para abrir la ubicacion
+    const handlePress = async () => {
+        const hasPermission = await requestLocationPermission();
+        if (hasPermission) {
+            console.log('Permiso de ubicación concedido');
+            // Aquí podrías iniciar la geolocalización
+        } else {
+            console.log('Permiso de ubicación denegado');
+            // Manejo del caso en que el permiso no es concedido
         }
     };
-
 
     const getLocation = () => {
         Geolocation.getCurrentPosition(
@@ -67,11 +89,15 @@ function FoundPetFormScreen() {
         launchCamera(options, (response) => {
             if (response.didCancel) {
                 console.log('El usuario canceló la toma de foto');
-              } else if (response.error) {
+            } else if (response.error) {
                 console.log('Error de ImagePicker: ', response.error);
-              } else {
-                console.log('Foto tomada:', response.uri);
-                //getLocation(); // Obtener la ubicación al tomar la foto
+            } else {
+                const newImage = {
+                    uri: response.assets[0].uri,
+                    type: response.assets[0].type,
+                    name: response.assets[0].fileName
+                };
+                setImages(prevImages => [...prevImages, newImage]);
             }
         });
     };
@@ -85,11 +111,50 @@ function FoundPetFormScreen() {
         }
     };
 
+    const [formData, setFormData] = useState({
+        description: '',
+        address: '',
+        email: '',
+        mobil: '',
+    });
+
+    const handleSubmit = () => {
+        if (validateFields()) {
+            console.log("data", formData)
+            dispatch(createPet(formData, images));
+            //navigation.navigate('PlaceOrderScreen');
+            return;
+        }
+    };
+
     return (
         <SafeAreaView style={styles.safeAreaContainer}>
-            {/* {!errorCameraPermission && <Message variant="danger">Sin permiso a la camara.</Message>} */}
             <ScrollView style={styles.formContainer}>
                 <Text style={styles.title}>Reportar Mascota Encontrada</Text>
+
+                <View style={styles.inputField}>
+                    <View style={styles.buttonContainer}>
+                        <View style={styles.roundedButton}>
+                            <Button title="Seleccionar imágenes" onPress={handleSelectImages} />
+                        </View>
+                        <View style={styles.roundedButton}>
+                            <Button title="Abrir Cámara" onPress={openCameraWithPermission} />
+                        </View>
+                    </View>
+
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                        {images.map((image, index) => (
+                            <View key={index} style={styles.imagePreviewContainer}>
+                                <Image source={{ uri: image.uri }} style={styles.imagePreview} />
+                            </View>
+                        ))}
+                    </ScrollView>
+                </View>
+
+                {errorCameraPermission && (
+                    <Message variant="danger"> Permiso denegado</Message>
+                )}
+
 
                 <View style={styles.inputField}>
                     <Text style={styles.label}>Descripción opcional:</Text>
@@ -128,14 +193,6 @@ function FoundPetFormScreen() {
                         keyboardType='numeric'
                     />
                 </View>
-
-                <Button
-                    title="Abrir Cámara"
-                    onPress={openCameraWithPermission}
-                />
-                {errorCameraPermission && (
-                    <Message variant="danger"> Permiso denegado</Message>
-                )}
             </ScrollView>
         </SafeAreaView>
 

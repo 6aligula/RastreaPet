@@ -48,7 +48,7 @@ function FormScreen({ navigation }) {
                     type: asset.type,
                     name: asset.fileName
                 }));
-                setImages([...images, ...newImages]);
+                setImages(prevImages => [...prevImages, ...newImages]);
             }
         });
     };    

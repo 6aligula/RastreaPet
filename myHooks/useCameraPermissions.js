@@ -1,5 +1,5 @@
 // myHooks/useCameraPermissions.js
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { PermissionsAndroid } from 'react-native';
 
 const useCameraPermissions = () => {
