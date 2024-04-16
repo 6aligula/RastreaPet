@@ -1,6 +1,6 @@
 // FoundPetFormScreen.js
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, SafeAreaView, Image } from 'react-native';
+import { View, TextInput, Button, Text, SafeAreaView, Image, TouchableOpacity } from 'react-native';
 import { launchCamera } from 'react-native-image-picker';
 import Geolocation from 'react-native-geolocation-service';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -9,6 +9,7 @@ import useLocationPermissions from '../myHooks/useLocationPermissions';
 import Message from '../components/Message';
 import styles from './styles/FoundPetFormScreenStyle';
 import { launchImageLibrary } from 'react-native-image-picker';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 function FoundPetFormScreen() {
     const [emailValid, setEmailValid] = useState(true);
@@ -127,6 +128,11 @@ function FoundPetFormScreen() {
         }
     };
 
+    const handleRemoveImage = (indexToRemove) => {
+        setImages(prevImages => prevImages.filter((_, index) => index !== indexToRemove));
+    };
+
+
     return (
         <SafeAreaView style={styles.safeAreaContainer}>
             <ScrollView style={styles.formContainer}>
@@ -146,6 +152,11 @@ function FoundPetFormScreen() {
                         {images.map((image, index) => (
                             <View key={index} style={styles.imagePreviewContainer}>
                                 <Image source={{ uri: image.uri }} style={styles.imagePreview} />
+                                <TouchableOpacity
+                                    style={styles.removeButton}
+                                    onPress={() => handleRemoveImage(index)}>
+                                    <Icon name="close" size={24} color="#fff" />
+                                </TouchableOpacity>
                             </View>
                         ))}
                     </ScrollView>
@@ -155,6 +166,14 @@ function FoundPetFormScreen() {
                     <Message variant="danger"> Permiso denegado</Message>
                 )}
 
+                <View style={styles.inputField}>
+                    <Text style={styles.label}>Dirección donde lo encontraste:</Text>
+                    <TextInput
+                        value={formData.address}
+                        onChangeText={(value) => setFormData(prev => ({ ...prev, address: value }))}
+                        style={styles.input}
+                    />
+                </View>
 
                 <View style={styles.inputField}>
                     <Text style={styles.label}>Descripción opcional:</Text>
@@ -163,15 +182,6 @@ function FoundPetFormScreen() {
                         onChangeText={(value) => setFormData(prev => ({ ...prev, description: value }))}
                         style={styles.input}
                         multiline
-                    />
-                </View>
-
-                <View style={styles.inputField}>
-                    <Text style={styles.label}>Dirección donde lo encontraste:</Text>
-                    <TextInput
-                        value={formData.address}
-                        onChangeText={(value) => setFormData(prev => ({ ...prev, address: value }))}
-                        style={styles.input}
                     />
                 </View>
 

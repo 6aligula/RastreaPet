@@ -58,13 +58,24 @@ const ShippingStyles = StyleSheet.create({
         color: '#2c3e50',
         textAlign: 'center',
     },
+    // Estilos para el boton de eliminar las imagenes  
     imagePreviewContainer: {
+        position: 'relative', // Esto permite posicionar el botón de eliminar absolutamente
         padding: 5,
     },
     imagePreview: {
         width: 100,
         height: 100,
-        resizeMode: 'cover'
-    }    
+        resizeMode: 'cover',
+    },
+    removeButton: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        backgroundColor: 'red',
+        borderRadius: 15,
+        padding: 5,
+        zIndex: 1,
+    }, 
 });
 export default ShippingStyles;

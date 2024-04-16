@@ -1,6 +1,6 @@
 //FormScreen.js
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Text, Button, ScrollView, Image } from 'react-native';
+import { View, TextInput, Text, Button, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './styles//FormStyles';
@@ -11,6 +11,7 @@ import useAndroidBackButton from '../myHooks/useAndroidBackButton';
 import { validateEmail } from '../functions/functions';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { launchImageLibrary } from 'react-native-image-picker';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const provincesAndCities = arbol.reduce((result, region) => {
     region.provinces.forEach(province => {
@@ -138,6 +139,10 @@ function FormScreen({ navigation }) {
         } else {
             setEmailValid(true);
         }
+    };
+
+    const handleRemoveImage = (indexToRemove) => {
+        setImages(prevImages => prevImages.filter((_, index) => index !== indexToRemove));
     };
 
     return (
@@ -279,10 +284,16 @@ function FormScreen({ navigation }) {
 
                 <View style={styles.inputField}>
                     <Button title="Añadir imágenes" onPress={handleSelectImages} />
+                    
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                         {images.map((image, index) => (
                             <View key={index} style={styles.imagePreviewContainer}>
                                 <Image source={{ uri: image.uri }} style={styles.imagePreview} />
+                                <TouchableOpacity
+                                    style={styles.removeButton}
+                                    onPress={() => handleRemoveImage(index)}>
+                                    <Icon name="close" size={24} color="#fff" />
+                                </TouchableOpacity>
                             </View>
                         ))}
                     </ScrollView>
