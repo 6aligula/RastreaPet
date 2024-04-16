@@ -11,6 +11,10 @@ const ShippingStyles = StyleSheet.create({
         width: '100%',
 
     },
+    dateDisplay: {
+        fontWeight: 'bold',
+        color: '#27ae60',
+    },
     input: {
         fontWeight: 'bold',
         color: '#27ae60',
@@ -54,5 +58,13 @@ const ShippingStyles = StyleSheet.create({
         color: '#2c3e50',
         textAlign: 'center',
     },
+    imagePreviewContainer: {
+        padding: 5,
+    },
+    imagePreview: {
+        width: 100,
+        height: 100,
+        resizeMode: 'cover'
+    }    
 });
 export default ShippingStyles;

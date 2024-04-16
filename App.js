@@ -13,6 +13,7 @@ import ProfileScreen from './screens/ProfileScreen';
 import MyOrdersScreen from './screens/MyOrdersScreen';
 import OrderScreen from './screens/OrderScreen';
 import FormScreen from './screens/FormScreen';
+import FoundPetFormScreen from './screens/FoundPetFormScreen';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './store';
 import Loader from './components/Loader';
@@ -88,6 +89,13 @@ const App = () => {
                 <Stack.Screen
                   name="FormScreen"
                   component={FormScreen}
+                  options={({ navigation }) => ({
+                    header: () => <CustomHeader navigation={navigation} />,
+                  })}
+                />
+                <Stack.Screen
+                  name="FoundPetFormScreen"
+                  component={FoundPetFormScreen}
                   options={({ navigation }) => ({
                     header: () => <CustomHeader navigation={navigation} />,
                   })}
