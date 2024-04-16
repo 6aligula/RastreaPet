@@ -143,3 +143,54 @@ export const createPet = (formData, images) => async (dispatch, getState) => {
     }
 };
 
+export const createPetFound = (formData, images) => async (dispatch) => {
+    try {
+        dispatch({ type: PET_CREATE_REQUEST });
+        // Configuración de cabeceras para datos de formulario
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        };
+
+        // Crear instancia de FormData y añadir datos del formulario
+        const petFormData = new FormData();
+        Object.keys(formData).forEach(key => {
+            petFormData.append(key, formData[key]);
+        });
+
+        // Añadir imágenes al FormData
+        images.forEach((image, index) => {
+            petFormData.append('images', {
+                uri: image.uri,
+                type: image.type,
+                name: `image${index}.jpg`  // Asegúrate de que el nombre sea único y adecuado
+            });
+        });
+
+        //console.log("Enviando solicitud de creación de mascota con los siguientes datos:", formData);
+        //console.log("Con las siguientes imágenes:", images);
+        //console.log("Headers de configuración:", config.headers);
+
+        const { data } = await axios.post(
+            `${Config.API_BASE_URL}/api/pets/create/found/`,
+            petFormData,
+            config
+        );
+
+        dispatch({
+            type: PET_CREATE_SUCCESS,
+            payload: data,
+        });
+
+    } catch (error) {
+        console.error("Error al crear la mascota:", error);
+        dispatch({
+            type: PET_CREATE_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        });
+    }
+};
+

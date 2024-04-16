@@ -1,6 +1,8 @@
 // FoundPetFormScreen.js
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, SafeAreaView, Image, TouchableOpacity } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { createPetFound } from '../store/actions/petActions';
 import { launchCamera } from 'react-native-image-picker';
 import Geolocation from 'react-native-geolocation-service';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -10,13 +12,15 @@ import Message from '../components/Message';
 import styles from './styles/FoundPetFormScreenStyle';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { validateEmail } from '../functions/functions';
 
-function FoundPetFormScreen() {
+function FoundPetFormScreen({ navigation }) {
     const [emailValid, setEmailValid] = useState(true);
     const [errorCameraPermission, setErrorCameraPermission] = useState(false);
     const { requestCameraPermission } = useCameraPermissions();
     const { requestLocationPermission } = useLocationPermissions();
     const [images, setImages] = useState([]);
+    const dispatch = useDispatch();
 
     //Funcion para seleccionar imagenes
     const handleSelectImages = () => {
@@ -120,12 +124,10 @@ function FoundPetFormScreen() {
     });
 
     const handleSubmit = () => {
-        if (validateFields()) {
-            console.log("data", formData)
-            dispatch(createPet(formData, images));
-            //navigation.navigate('PlaceOrderScreen');
-            return;
-        }
+        console.log("data", formData)
+        dispatch(createPetFound(formData, images));
+        navigation.navigate('HomeScreen');
+        return;
     };
 
     const handleRemoveImage = (indexToRemove) => {
@@ -202,6 +204,14 @@ function FoundPetFormScreen() {
                         style={styles.input}
                         keyboardType='numeric'
                     />
+                </View>
+                <View style={styles.buttonContainer}>
+                    <View style={styles.roundedButton}>
+                        <Button
+                            title='Enviar formulario'
+                            onPress={handleSubmit}
+                        />
+                    </View>
                 </View>
             </ScrollView>
         </SafeAreaView>
