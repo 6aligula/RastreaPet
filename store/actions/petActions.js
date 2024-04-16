@@ -86,7 +86,7 @@ export const listPetDetails = (id) => async (dispatch) => {
     }
 }
 
-export const createPet = (formData) => async (dispatch, getState) => {
+export const createPet = (formData, images) => async (dispatch, getState) => {
     try {
         dispatch({ type: PET_CREATE_REQUEST });
 
@@ -94,19 +94,36 @@ export const createPet = (formData) => async (dispatch, getState) => {
             userLogin: { userInfo },
         } = getState();
 
+        // Configuración de cabeceras para datos de formulario
         const config = {
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'multipart/form-data',
                 Authorization: `Bearer ${userInfo.token}`,
             }
         };
 
-        console.log("Enviando solicitud de creación de mascota con los siguientes datos:", formData);
-        console.log("Headers de configuración:", config.headers);
+        // Crear instancia de FormData y añadir datos del formulario
+        const petFormData = new FormData();
+        Object.keys(formData).forEach(key => {
+            petFormData.append(key, formData[key]);
+        });
+
+        // Añadir imágenes al FormData
+        images.forEach((image, index) => {
+            petFormData.append('images', {
+                uri: image.uri,
+                type: image.type,
+                name: `image${index}.jpg`  // Asegúrate de que el nombre sea único y adecuado
+            });
+        });
+
+        //console.log("Enviando solicitud de creación de mascota con los siguientes datos:", formData);
+        //console.log("Con las siguientes imágenes:", images);
+        //console.log("Headers de configuración:", config.headers);
 
         const { data } = await axios.post(
             `${Config.API_BASE_URL}/api/pets/create/`,
-            formData,
+            petFormData,
             config
         );
 
@@ -116,6 +133,7 @@ export const createPet = (formData) => async (dispatch, getState) => {
         });
 
     } catch (error) {
+        console.error("Error al crear la mascota:", error);
         dispatch({
             type: PET_CREATE_FAIL,
             payload: error.response && error.response.data.detail
@@ -124,3 +142,4 @@ export const createPet = (formData) => async (dispatch, getState) => {
         });
     }
 };
+

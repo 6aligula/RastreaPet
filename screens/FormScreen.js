@@ -1,6 +1,6 @@
 //FormScreen.js
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Text, Button, ScrollView } from 'react-native';
+import { View, TextInput, Text, Button, ScrollView, Image } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './styles//FormStyles';
@@ -10,6 +10,7 @@ import { createPet } from '../store/actions/petActions';
 import useAndroidBackButton from '../myHooks/useAndroidBackButton';
 import { validateEmail } from '../functions/functions';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 const provincesAndCities = arbol.reduce((result, region) => {
     region.provinces.forEach(province => {
@@ -27,6 +28,30 @@ function FormScreen({ navigation }) {
     const [show, setShow] = useState(false);
     const formattedDate = date.toLocaleDateString('es-ES');  // Formato de fecha local 'dd/mm/yyyy'
 
+    const [images, setImages] = useState([]);
+
+    const handleSelectImages = () => {
+        const options = {
+            mediaType: 'photo',
+            quality: 1,
+            selectionLimit: 0,  // 0 para múltiples selecciones
+        };
+    
+        launchImageLibrary(options, (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.errorCode) {
+                console.log('ImagePicker Error: ', response.errorMessage);
+            } else {
+                const newImages = response.assets.map(asset => ({
+                    uri: asset.uri,
+                    type: asset.type,
+                    name: asset.fileName
+                }));
+                setImages([...images, ...newImages]);
+            }
+        });
+    };    
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
@@ -63,14 +88,13 @@ function FormScreen({ navigation }) {
         age: '',
         reward: '',
         missingDate: '',
-
+        description: '',
         province: initialProvince,
         city: initialCity,
         postalCode: '',
         address: '',
         email: '',
         mobil: '',
-        comment: '',
     });
 
     const validateFields = () => {
@@ -101,7 +125,7 @@ function FormScreen({ navigation }) {
     const handleSubmit = () => {
         if (validateFields()) {
             console.log("data", formData)
-            dispatch(createPet(formData));
+            dispatch(createPet(formData, images));
             //navigation.navigate('PlaceOrderScreen');
             return;
         }
@@ -254,6 +278,17 @@ function FormScreen({ navigation }) {
                 </View>
 
                 <View style={styles.inputField}>
+                    <Button title="Añadir imágenes" onPress={handleSelectImages} />
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                        {images.map((image, index) => (
+                            <View key={index} style={styles.imagePreviewContainer}>
+                                <Image source={{ uri: image.uri }} style={styles.imagePreview} />
+                            </View>
+                        ))}
+                    </ScrollView>
+                </View>
+
+                <View style={styles.inputField}>
                     <Text style={styles.label}>Email: opcional</Text>
                     <TextInput
                         value={formData.email}
@@ -273,10 +308,10 @@ function FormScreen({ navigation }) {
                 </View>
 
                 <View style={styles.inputField}>
-                    <Text style={styles.label}>Comentario opcional:</Text>
+                    <Text style={styles.label}>Descripción opcional:</Text>
                     <TextInput
-                        value={formData.comment}
-                        onChangeText={(value) => setFormData(prev => ({ ...prev, comment: value }))}
+                        value={formData.description}
+                        onChangeText={(value) => setFormData(prev => ({ ...prev, description: value }))}
                         style={styles.input}
                         multiline
                     />
