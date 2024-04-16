@@ -11,6 +11,10 @@ const ShippingStyles = StyleSheet.create({
         width: '100%',
 
     },
+    dateDisplay: {
+        fontWeight: 'bold',
+        color: '#27ae60',
+    },
     input: {
         fontWeight: 'bold',
         color: '#27ae60',

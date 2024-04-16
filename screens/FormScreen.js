@@ -6,9 +6,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './styles//FormStyles';
 import arbol from '../data/arbol.json'
 import { useDispatch, useSelector } from 'react-redux';
-import {createPet} from '../store/actions/petActions';
+import { createPet } from '../store/actions/petActions';
 import useAndroidBackButton from '../myHooks/useAndroidBackButton';
 import { validateEmail } from '../functions/functions';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const provincesAndCities = arbol.reduce((result, region) => {
     region.provinces.forEach(province => {
@@ -19,16 +20,31 @@ const provincesAndCities = arbol.reduce((result, region) => {
 
 
 function FormScreen({ navigation }) {
-
     const userLogin = useSelector(state => state.userLogin);
     const { userInfo } = userLogin;
 
+    const [date, setDate] = useState(new Date());
+    const [show, setShow] = useState(false);
+    const formattedDate = date.toLocaleDateString('es-ES');  // Formato de fecha local 'dd/mm/yyyy'
+
+
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShow(false);
+        setDate(currentDate);
+        setFormData(prev => ({ ...prev, missingDate: currentDate.toISOString().split('T')[0] })); // Guarda la fecha en formato YYYY-MM-DD
+    };
+
+    const showDatepicker = () => {
+        setShow(true);
+    };
+
     useEffect(() => {
         if (!userInfo) {
-            navigation.navigate('LoginScreen', {from: 'FormScreen'});
+            navigation.navigate('LoginScreen', { from: 'FormScreen' });
         }
 
-    }, [dispatch,  userInfo, navigation]);
+    }, [dispatch, userInfo, navigation]);
 
     useAndroidBackButton(navigation);
 
@@ -44,9 +60,9 @@ function FormScreen({ navigation }) {
         name: '',
         category: '',
         breed: '',
-        age:'',
-        reward:'',
-        missingDate:'',
+        age: '',
+        reward: '',
+        missingDate: '',
 
         province: initialProvince,
         city: initialCity,
@@ -56,26 +72,6 @@ function FormScreen({ navigation }) {
         mobil: '',
         comment: '',
     });
-
-   /* useEffect(() => {
-        if (shippingAddress) {
-            setFormData({
-                petName: petName || '',
-                kindPet: kindPet || '',
-                petName: petName || '',
-                petName: petName || '',
-                petName: petName || '',
-
-                province: province || initialProvince,
-                city: city || initialCity,
-                postalCode: postalCode || '',
-                address: address || '',
-                comment: comment || '',
-                email: email || '',
-                mobil: mobil || ''
-            });
-        }
-    }, [shippingAddress, initialProvince, initialCity]);*/
 
     const validateFields = () => {
         const errors = {};
@@ -90,7 +86,6 @@ function FormScreen({ navigation }) {
             city: 'La ciudad es obligatoria.',
             postalCode: 'El código postal es obligatorio.',
             address: 'La dirección es obligatoria.',
-            email: 'El email es obligatorio.',
         };
 
         for (const [field, errorMessage] of Object.entries(fieldsToValidate)) {
@@ -179,12 +174,24 @@ function FormScreen({ navigation }) {
 
                 <View style={styles.inputField}>
                     <Text style={styles.label}>Fecha de perdida de mascota:</Text>
-                    <TextInput
-                        value={formData.missingDate}
-                        onChangeText={(value) => setFormData(prev => ({ ...prev, missingDate: value }))}
-                        style={styles.input}
-                    />
-                    {/* {fieldErrors.missingDate && <Text style={{ color: 'red' }}>{fieldErrors.missingDate}</Text>} */}
+
+                    <View style={styles.buttonContainer}>
+                        <View style={styles.roundedButton}>
+                            <Button onPress={showDatepicker} title="Selecciona la fecha" />
+                            {show && (
+                                <DateTimePicker
+                                    testID="dateTimePicker"
+                                    value={date}
+                                    mode={'date'}
+                                    is24Hour={true}
+                                    display="default"
+                                    onChange={onChange}
+                                />
+                            )}
+                        </View>
+                    </View>
+                    <Text style={styles.dateDisplay}>{formattedDate}</Text>
+                    {fieldErrors.missingDate && <Text style={{ color: 'red' }}>{fieldErrors.missingDate}</Text>}
                 </View>
 
                 <View style={styles.inputField}>
@@ -237,7 +244,7 @@ function FormScreen({ navigation }) {
                 </View>
 
                 <View style={styles.inputField}>
-                    <Text style={styles.label}>Dirección:</Text>
+                    <Text style={styles.label}>Dirección donde se perdio:</Text>
                     <TextInput
                         value={formData.address}
                         onChangeText={(value) => setFormData(prev => ({ ...prev, address: value }))}
@@ -247,14 +254,12 @@ function FormScreen({ navigation }) {
                 </View>
 
                 <View style={styles.inputField}>
-                    <Text style={styles.label}>Email:</Text>
+                    <Text style={styles.label}>Email: opcional</Text>
                     <TextInput
                         value={formData.email}
                         onChangeText={handleEmailChange}
                         style={emailValid ? styles.input : { ...styles.input, borderColor: 'red' }}
                     />
-                    {/* {!emailValid && <Text style={{ color: 'red' }}>Por favor, ingresa un correo electrónico válido. Solo se acepta letras minúsculas</Text>}
-                    {fieldErrors.email && <Text style={{ color: 'red' }}>{fieldErrors.email}</Text>} */}
                 </View>
 
                 <View style={styles.inputField}>
@@ -279,7 +284,7 @@ function FormScreen({ navigation }) {
                 <View style={styles.buttonContainer}>
                     <View style={styles.roundedButton}>
                         <Button
-                            title='Enviar'
+                            title='Enviar formulario'
                             onPress={handleSubmit}
                         />
                     </View>
