@@ -7,12 +7,10 @@ import CustomHeader from './components/CustomHeader';
 import HomeScreen from './screens/HomeScreen';
 import DetailPetScreen from './screens/DetailPetScreen';
 import SearchScreen from './screens/SearchScreen';
-import CartScreen from './screens/CartScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import MyOrdersScreen from './screens/MyOrdersScreen';
-import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
 import FormScreen from './screens/FormScreen';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -51,13 +49,7 @@ const App = () => {
                     header: () => <CustomHeader navigation={navigation} />,
                   })}
                 />
-                <Stack.Screen
-                  name="CartScreen"
-                  component={CartScreen}
-                  options={({ navigation }) => ({
-                    header: () => <CustomHeader navigation={navigation} />,
-                  })}
-                />
+
                 <Stack.Screen
                   name="LoginScreen"
                   component={LoginScreen}
@@ -82,13 +74,6 @@ const App = () => {
                 <Stack.Screen
                   name="MyOrdersScreen"
                   component={MyOrdersScreen}
-                  options={({ navigation }) => ({
-                    header: () => <CustomHeader navigation={navigation} />,
-                  })}
-                />
-                <Stack.Screen
-                  name="PlaceOrderScreen"
-                  component={PlaceOrderScreen}
                   options={({ navigation }) => ({
                     header: () => <CustomHeader navigation={navigation} />,
                   })}

@@ -35,6 +35,7 @@ const HomeScreen = ({ navigation }) => {
         setIsConnected(state.isConnected);
         if (state.isConnected) {
           dispatch(listPets('', 1));
+          console.log("peticion enviada al server");
         }
         
       };

@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { combineReducers } from 'redux';
-import { cartReducer } from './cartReducers';
 import {
     petListReducers,
     petDetailsReducers,
@@ -19,12 +18,6 @@ import {
     orderListMyReducer,
 } from './orderReducer';
 import { persistReducer} from 'redux-persist';
-
-const cartPersistConfig = {
-    key: 'cart',
-    storage: AsyncStorage,
-    whitelist: ['cartItems']
-};
 
 const petListPersistConfig = {
     key: 'petList',
@@ -55,7 +48,6 @@ const userPersistConfig = {
 // });
 
 const rootReducer = combineReducers({
-    cart: persistReducer(cartPersistConfig, cartReducer),
     petList: persistReducer(petListPersistConfig, petListReducers),
     petDetails: persistReducer(petDetailsPersistConfig, petDetailsReducers),
     petCreate: petCreateReducer,
