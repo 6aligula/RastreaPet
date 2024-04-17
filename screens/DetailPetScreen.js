@@ -32,7 +32,7 @@ function DetailProductScreen({ navigation, route }) {
         dispatch(listPetDetails(petId));
         //console.log("Conectado a internet?", state.isConnected);
       }
-      
+
     };
     checkConnectivityAndLoadData();
   }, [dispatch, petId]);
@@ -45,17 +45,17 @@ function DetailProductScreen({ navigation, route }) {
           <Loader />
         ) : error ? (
           <>
-          {pet && pet.length > 0 && (
-            <FlatList
-              data={pet}
-              keyExtractor={(item) => item._id.toString()}
-              renderItem={renderItem}
-              ListHeaderComponent={CombinedHeader}
-              numColumns={1}
-            />
-          )}
+            {pet && pet.length > 0 && (
+              <FlatList
+                data={pet}
+                keyExtractor={(item) => item._id.toString()}
+                renderItem={renderItem}
+                ListHeaderComponent={CombinedHeader}
+                numColumns={1}
+              />
+            )}
 
-        </>
+          </>
         ) : (
           <View style={styles.container}>
             <Text style={[stylesGlobal.text, styles.title]}>Detalles de la mascota</Text>
@@ -66,21 +66,35 @@ function DetailProductScreen({ navigation, route }) {
               <Text>No Images Available</Text>
             )}
 
-            <Text style={styles.productPrice}>Recompensa: €{pet.reward}</Text>
-            <Text style={[stylesGlobal.text ,styles.productName]}>Nombre: {pet.name}</Text>
-            <Text style={[stylesGlobal.text, styles.productDescription]}>Tipo: {pet.category}</Text>
-            <Text style={[stylesGlobal.text, styles.productDescription]}>Raza: {pet.breed}</Text>
-            <Text style={[stylesGlobal.text, styles.productDescription]}>Edad: {pet.age} años</Text>
-            <Text style={[stylesGlobal.text, styles.productDescription]}>Fecha cuando se perdio: {new Date(pet.missingDate).toLocaleDateString()} </Text>
-            <Text style={[stylesGlobal.text, styles.productDescription]}>Se perdio en : {pet.city}, {pet.province}, {pet.address}</Text>
+            {pet.missing && (
+              <>
+                <Text style={styles.productPrice}>Recompensa: €{pet.reward}</Text>
+                <Text style={[stylesGlobal.text, styles.productName]}>Nombre: {pet.name}</Text>
+                <Text style={[stylesGlobal.text, styles.productDescription]}>Tipo: {pet.category}</Text>
+                <Text style={[stylesGlobal.text, styles.productDescription]}>Raza: {pet.breed}</Text>
+                <Text style={[stylesGlobal.text, styles.productDescription]}>Edad: {pet.age} años</Text>
+              </>
+
+            )}
+            <Text style={[stylesGlobal.text, styles.productDescription]}>
+              {pet.missing ? 'Fecha de desaparición: ' : 'Fecha cuando se encontró: '}
+              {new Date(pet.missing ? pet.missingDate : pet.createdAt).toLocaleDateString()}
+            </Text>
+
+            <Text style={[stylesGlobal.text, styles.productDescription]}>
+              {pet.missing ? 'Lugar de desaparición: ' : 'Lugar donde se encontró: '}
+              {pet.missing ? `${pet.city}, ${pet.province}, ${pet.address}` : pet.address}
+            </Text>
+            <Text style={[stylesGlobal.text, styles.productDescription]}>Telefono de contacto : {pet.mobil}</Text>
+            <Text style={[stylesGlobal.text, styles.productDescription]}>Email : {pet.email}</Text>
 
             <View style={styles.rating}>
               <Rating value={pet.rating} />
               <Text style={styles.rating}>{`${pet.numTrail} Pistas`}</Text>
             </View>
-            
+
             <Text style={[stylesGlobal.text, styles.productDescription]}>Descripción: {pet.description}</Text>
-       
+
 
           </View>
         )}

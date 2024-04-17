@@ -127,7 +127,7 @@ function FormScreen({ navigation }) {
         if (validateFields()) {
             console.log("data", formData)
             dispatch(createPet(formData, images));
-            //navigation.navigate('PlaceOrderScreen');
+            navigation.navigate('HomeScreen');
             return;
         }
     };
