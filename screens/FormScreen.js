@@ -148,7 +148,7 @@ function FormScreen({ navigation }) {
     return (
         <SafeAreaView style={styles.safeAreaContainer}>
             <ScrollView style={styles.formContainer}>
-                <Text style={styles.title}>Datos de la mascota</Text>
+                <Text style={styles.title}>Formulario de mascota perdida</Text>
 
                 <View style={styles.inputField}>
                     <Text style={styles.label}>Nombre de la mascota:</Text>

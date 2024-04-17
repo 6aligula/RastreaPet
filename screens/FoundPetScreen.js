@@ -1,4 +1,4 @@
-//HomeScreen.js
+//FounPetScreen.js
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
@@ -17,7 +17,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import NetInfo from "@react-native-community/netinfo";
 import FloatingButton from '../components/FloatingButton';
 
-const HomeScreen = ({ navigation }) => {
+const FounPetScreen = ({ navigation }) => {
   const [isConnected, setIsConnected] = useState(true);
 
   useAndroidBackButton(navigation, () => {
@@ -53,7 +53,7 @@ const HomeScreen = ({ navigation }) => {
   const CombinedHeader = () => (
     <View style={styles.container}>
       <SearchBox navigation={navigation} />
-      <Text style={[styles.title, stylesGlobal.text]}>Últimas mascotas perdidas</Text>
+      <Text style={[styles.title, stylesGlobal.text]}>Últimas mascotas encontradas</Text>
     </View>
   );
 
@@ -97,10 +97,10 @@ const HomeScreen = ({ navigation }) => {
         />
       )}
       <FloatingButton
-        onPress={() => navigation.navigate('FormScreen')}
-        title="Publicar mascota perdida"
+        onPress={() => navigation.navigate('FoundPetFormScreen')}
+        title="Publicar mascota encontrada"
       />
     </SafeAreaView>
   );
 };
-export default HomeScreen;
+export default FounPetScreen;

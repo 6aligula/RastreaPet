@@ -28,15 +28,16 @@ const CustomHeader = ({ locationHome, navigation }) => {
                     {userInfo && <Text style={styles.usernameText}>{userInfo.name}</Text>}
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => navigation.navigate('FoundPetFormScreen')} style={styles.cartButton}>
-                    <Icon name="paw" size={24} color="#fff" />
-                    <Text>Encontrado</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={styles.cartButton}>
+                    <Icon name="search" size={24} color="#fff" />
+                    <Text>Perdidos</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => navigation.navigate('FormScreen')} style={styles.cartButton}>
-                    <Icon name="search" size={24} color="#fff" />
-                    <Text>Anunciar</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('FoundPetScreen')} style={styles.cartButton}>
+                    <Icon name="paw" size={24} color="#fff" />
+                    <Text>Encontrados</Text>
                 </TouchableOpacity>
+
 
             </View>
         </SafeAreaView>
