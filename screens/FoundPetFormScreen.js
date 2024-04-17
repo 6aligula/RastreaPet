@@ -13,14 +13,18 @@ import styles from './styles/FoundPetFormScreenStyle';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { validateEmail } from '../functions/functions';
+import Loader from '../components/Loader';
 
 function FoundPetFormScreen({ navigation }) {
     const [emailValid, setEmailValid] = useState(true);
     const [errorCameraPermission, setErrorCameraPermission] = useState(false);
     const { requestCameraPermission } = useCameraPermissions();
     const { requestLocationPermission } = useLocationPermissions();
+    const [message, setMessage] = useState('');
+    const [messageType, setMessageType] = useState('info'); // 'info' o 'danger'    
     const [images, setImages] = useState([]);
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
 
     //Funcion para seleccionar imagenes
     const handleSelectImages = () => {
@@ -61,29 +65,61 @@ function FoundPetFormScreen({ navigation }) {
             console.log('No se otorgaron los permisos para la cámara');
         }
     };
-    // Funcion para abrir la ubicacion
-    const handlePress = async () => {
+
+    // Función para obtener la ubicación automáticamente
+    const getLocation = async () => {
         const hasPermission = await requestLocationPermission();
         if (hasPermission) {
-            console.log('Permiso de ubicación concedido');
-            // Aquí podrías iniciar la geolocalización
+            setLoading(true);
+            Geolocation.getCurrentPosition(
+                async (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+    
+                    try {
+                        const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`;
+                        const response = await fetch(url, {
+                            method: 'GET',
+                            headers: {
+                                'User-Agent': 'tu_nombre_app/tu_email_contacto'
+                            }
+                        });
+                        const data = await response.json();
+                        if (data && data.address) {
+                            const address = `${data.address.road || ''} ${data.address.house_number || ''}, ${data.address.city || data.address.town || ''}, ${data.address.state || ''}, ${data.address.country || ''}, ${data.address.postcode || ''}`;
+                            setFormData(prev => ({ ...prev, address: address }));
+                            setMessage('Ubicación correcta, no olvides añadir el número de la calle.');
+                            setMessageType('info');
+                            console.log('Dirección obtenida:', address);
+                        } else {
+                            console.log('Geocodificación falló:', data.error);
+                            setMessage('Error al realizar la geocodificación.');
+                            setMessageType('danger');
+                        }
+                    } catch (error) {
+                        console.error('Error al realizar la geocodificación:', error);
+                        setMessage('Error al realizar la geocodificación 2.');
+                        setMessageType('danger');
+                    }finally {
+                        setLoading(false); // Desactiva el loader independientemente del resultado
+                    }
+                },
+                (error) => {
+                    console.error('Error obteniendo la localización:', error);
+                    setMessage('Error al obtener la ubicación.');
+                    setMessageType('danger');
+                    setLoading(false);
+                },
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+            );
         } else {
-            console.log('Permiso de ubicación denegado');
-            // Manejo del caso en que el permiso no es concedido
+            setMessage('Permiso de ubicación denegado.');
+            setMessageType('danger');
+            setLoading(false);
         }
     };
-
-    const getLocation = () => {
-        Geolocation.getCurrentPosition(
-            (position) => {
-                setAddress(`Lat: ${position.coords.latitude}, Lon: ${position.coords.longitude}`);
-            },
-            (error) => {
-                console.error('Error obteniendo la localización: ', error);
-            },
-            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-        );
-    };
+    
+    
 
     const openCamera = () => {
         const options = {
@@ -174,8 +210,14 @@ function FoundPetFormScreen({ navigation }) {
                         value={formData.address}
                         onChangeText={(value) => setFormData(prev => ({ ...prev, address: value }))}
                         style={styles.input}
+                        multiline
                     />
+                    <Button title="Obtener ubicación" onPress={getLocation} />
                 </View>
+                {loading && <Loader />}
+                {message && (
+                    <Message variant={messageType}>{message}</Message>
+                )}
 
                 <View style={styles.inputField}>
                     <Text style={styles.label}>Descripción opcional:</Text>
