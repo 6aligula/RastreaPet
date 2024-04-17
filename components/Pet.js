@@ -1,6 +1,6 @@
 // Pet.js
 import React from 'react';
-import { View, Text, TouchableOpacity,  } from 'react-native';
+import { View, Text, TouchableOpacity, } from 'react-native';
 import Rating from './Rating';
 import styles from './styles/PetStyle';
 import CarouselComponent from './Carousel';
@@ -10,7 +10,7 @@ const Pet = ({ pet, onDetailsPress }) => {
   const { stylesGlobal } = useColorSchemeContext();
   return (
     <View style={[stylesGlobal.background, styles.row]}>
-      <Text style={styles.price}>Recompensa {pet.reward}€</Text>
+      {pet.missing && <Text style={styles.price}>Recompensa {pet.reward}€</Text>}
 
       {pet.images && pet.images.length ? (
         <CarouselComponent images={pet.images.map(img => img.image)} />

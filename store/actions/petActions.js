@@ -17,11 +17,11 @@ import {
 
 } from '../constants/petConstants';
 
-export const listPets = (keyword = '', page = 1) => async (dispatch) => {
+export const listPets = (keyword = '', page = 1, missing= false) => async (dispatch) => {
     //console.log("ip: ", Config.API_BASE_URL);
     try {
         dispatch({ type: PET_LIST_REQUEST })
-        const url = `${Config.API_BASE_URL}/api/pets/?${keyword ? `keyword=${keyword}` : ''}&page=${page}`;
+        const url = `${Config.API_BASE_URL}/api/pets/?${keyword ? `keyword=${keyword}&` : ''}page=${page}&missing=${missing}`;
         //console.log("URL de la solicitud:", url);
 
         const { data } = await axios.get(url);
