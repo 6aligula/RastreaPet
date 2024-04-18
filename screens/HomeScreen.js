@@ -46,9 +46,10 @@ const HomeScreen = ({ navigation }) => {
   );
 
   const renderItem = ({ item }) => (
-    <Pet pet={item} onDetailsPress={() => navigation.navigate('DetailPetScreen', { petId: item._id })} />
+    <TouchableOpacity onPress={() => navigation.navigate('DetailPetScreen', { petId: item._id })}>
+      <Pet pet={item} />
+    </TouchableOpacity>
   );
-
 
   const CombinedHeader = () => (
     <View style={styles.container}>

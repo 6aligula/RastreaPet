@@ -1,6 +1,6 @@
 // Pet.js
 import React from 'react';
-import { View, Text, TouchableOpacity, } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import Rating from './Rating';
 import styles from './styles/PetStyle';
 import CarouselComponent from './Carousel';
@@ -13,7 +13,9 @@ const Pet = ({ pet, onDetailsPress }) => {
       {pet.missing && <Text style={styles.price}>Recompensa {pet.reward}€</Text>}
 
       {pet.images && pet.images.length ? (
-        <CarouselComponent images={pet.images.map(img => img.image)} />
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: pet.images[0].image }} style={styles.image} />
+        </View>
       ) : (
         <Text>No Images Available</Text>
       )}
@@ -22,9 +24,9 @@ const Pet = ({ pet, onDetailsPress }) => {
       <Rating value={pet.rating} />
       <Text style={stylesGlobal.text}>{`${pet.numTrail} Pista`}</Text>
 
-      <TouchableOpacity onPress={onDetailsPress} style={styles.detailsButton}>
+      {/* <TouchableOpacity onPress={onDetailsPress} style={styles.detailsButton}>
         <Text style={styles.detailsButtonText}>Ver detalles</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
