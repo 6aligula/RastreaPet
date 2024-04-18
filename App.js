@@ -34,14 +34,14 @@ const App = () => {
                   name="HomeScreen"
                   component={HomeScreen}
                   options={({ navigation }) => ({
-                    header: () => <CustomHeader locationHome={true} navigation={navigation} />,
+                    header: () => <CustomHeader locationHome={true} navigation={navigation} currentScreen="HomeScreen"/>,
                   })}
                 />
                 <Stack.Screen
                   name="DetailPetScreen"
                   component={DetailPetScreen}
                   options={({ navigation }) => ({
-                    header: () => <CustomHeader navigation={navigation} />,
+                    header: () => <CustomHeader navigation={navigation} currentScreen="DetailPetScreen"/>,
                   })}
                 />
                 <Stack.Screen
@@ -98,14 +98,14 @@ const App = () => {
                   name="FoundPetFormScreen"
                   component={FoundPetFormScreen}
                   options={({ navigation }) => ({
-                    header: () => <CustomHeader navigation={navigation} />,
+                    header: () => <CustomHeader navigation={navigation} currentScreen="FoundPetFormScreen" />,
                   })}
                 />
                 <Stack.Screen
                   name="FoundPetScreen"
                   component={FoundPetScreen}
                   options={({ navigation }) => ({
-                    header: () => <CustomHeader navigation={navigation} />,
+                    header: () => <CustomHeader navigation={navigation} currentScreen="FoundPetScreen" />,
                   })}
                 />
               </Stack.Navigator>

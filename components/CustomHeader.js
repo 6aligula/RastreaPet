@@ -5,10 +5,20 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import logo from '../images/logo.webp';
 import styles from './styles/CustomHeaderStyle';
 
-const CustomHeader = ({ locationHome, navigation }) => {
+const CustomHeader = ({ locationHome, navigation, currentScreen }) => {
 
     const userLogin = useSelector((state) => state.userLogin);
     const {userInfo} = userLogin;
+
+    // Definir un color basado en la pantalla actual
+    // const isHomeOrFound = currentScreen === 'HomeScreen' || currentScreen === 'FoundPetScreen';
+    // console.log("Current Screen:", currentScreen, "Is Home or Found:", isHomeOrFound);
+    // const iconColor = isHomeOrFound ? '#FF0000' : '#00FF00';
+       // Colores específicos para cada ícono basados en la pantalla actual
+       const searchIconColor = currentScreen === 'HomeScreen' ? '#FF00FF' : '#FFFFFF'; // Verde en HomeScreen, blanco en otros casos
+       const pawIconColor = currentScreen === 'FoundPetScreen' ? '#FF00FF' : '#FFFFFF'; // Rojo en FoundPetScreen, blanco en otros casos
+       
+    
 
     return (
         <SafeAreaView>
@@ -29,12 +39,12 @@ const CustomHeader = ({ locationHome, navigation }) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={styles.cartButton}>
-                    <Icon name="search" size={24} color="#fff" />
+                    <Icon name="search" size={24} color={searchIconColor} />
                     <Text>Perdidos</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => navigation.navigate('FoundPetScreen')} style={styles.cartButton}>
-                    <Icon name="paw" size={24} color="#fff" />
+                    <Icon name="paw" size={24} color={pawIconColor} />
                     <Text>Encontrados</Text>
                 </TouchableOpacity>
 
