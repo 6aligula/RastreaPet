@@ -83,10 +83,6 @@ const ProfileScreen = ({ navigation }) => {
         });
     };
 
-    const navigateToMyOrders = () => {
-        navigation.navigate('MyOrdersScreen');
-    }
-
     useEffect(() => {
         if (!userInfo) {
             navigation.navigate('LoginScreen');
@@ -130,11 +126,6 @@ const ProfileScreen = ({ navigation }) => {
                         <TouchableOpacity style={styles.logoutButton} onPress={logoutHandler}>
                             <FontAwesome name="lock" size={20} color="white" />
                             <Text style={styles.logoutText}>Salir</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.myOrdersButton} onPress={navigateToMyOrders}>
-                            <FontAwesome name="list-ul" size={20} color="white" />
-                            <Text style={styles.logoutText}>Mis Pedidos</Text>
                         </TouchableOpacity>
                     </View>
 
