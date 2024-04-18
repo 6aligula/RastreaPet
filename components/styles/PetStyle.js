@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         resizeMode: 'cover',
-        textAlign: 'center',
     },
     title: {
         fontSize: 18,

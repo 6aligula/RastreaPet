@@ -2,59 +2,55 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/core';
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
-import Product from '../components/Pet';
+import Pet from '../components/Pet';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import styles from './styles/SearchStyles';
-import { listProducts } from '../store/actions/petActions';
+import { listPets } from '../store/actions/petActions';
 import { useColorSchemeContext } from '../ColorSchemeContext';
-import useAndroidBackButton from '../myHooks/useAndroidBackButton'
-
-
+import useAndroidBackButton from '../myHooks/useAndroidBackButton';
 
 const SearchScreen = ({ navigation, route }) => {
-
     useAndroidBackButton(navigation, () => {
         navigation.navigate('HomeScreen');
     });
     const { stylesGlobal } = useColorSchemeContext();
     const { searchKeyword } = route.params;
     const dispatch = useDispatch();
-    const productList = useSelector((state) => state.productList);
-    const { error, loading, products, page } = productList;
+    const petList = useSelector((state) => state.petList);
+    const { error, loading, pets, page, pages } = petList;
 
-    useAndroidBackButton(navigation);
     useFocusEffect(
         React.useCallback(() => {
-            dispatch(listProducts(searchKeyword, page));
-        }, [dispatch])
+            dispatch(listPets(searchKeyword, page, false));
+        }, [dispatch, searchKeyword])
     );
 
     const renderItem = ({ item }) => (
-        <TouchableOpacity onPress={() => navigation.navigate('DetailProductScreen', { productId: item._id })}>
-            <Product product={item} />
+        <TouchableOpacity onPress={() => navigation.navigate('DetailPetScreen', { petId: item._id })}>
+            <Pet pet={item} />
         </TouchableOpacity>
     );
 
     return (
         <View style={[styles.container, stylesGlobal.background]}>
-            <Text style={[styles.title, stylesGlobal.text]}>Productos encontrados</Text>
+            <Text style={[styles.title, stylesGlobal.text]}>Mascotas encontradas</Text>
             {loading ? (
                 <Loader />
             ) : error ? (
                 <Message variant="danger">{error}</Message>
             ) : (
-                products && (
-                    products.length > 0 ? (
+                pets && (
+                    pets.length > 0 ? (
                         <FlatList
-                            data={products}
+                            data={pets}
                             renderItem={renderItem}
-                            keyExtractor={(item) => item._id}
-                            contentContainerStyle={styles.productList}
+                            keyExtractor={(item) => item._id.toString()}
+                            contentContainerStyle={styles.petList}
                             numColumns={2}
                         />
                     ) : (
-                        <Message variant="danger">No se encontró ningún producto relacionado con su busqueda</Message>
+                        <Message variant="danger">No se encontró ninguna mascota relacionada con su búsqueda</Message>
                     )
                 )
             )}

@@ -1,3 +1,4 @@
+// SearchBox.js
 import React, { useState } from 'react';
 import styles from '../screens/styles/HomeStyles';
 import Message from './Message';
