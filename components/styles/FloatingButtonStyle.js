@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: '10%', // Centrado con un 10% de margen a cada lado
         right: '10%',
-        bottom: 20, // A una distancia de 20 del borde inferior
+        bottom: 60, // A una distancia de 20 del borde inferior
         backgroundColor: '#FF4081', // El color de fondo que desees
         borderRadius: 25, // Esto dará los bordes redondeados
         paddingVertical: 10, // Un poco de padding vertical para dar altura
