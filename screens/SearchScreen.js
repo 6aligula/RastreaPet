@@ -24,7 +24,7 @@ const SearchScreen = ({ navigation, route }) => {
 
     useFocusEffect(
         React.useCallback(() => {
-            dispatch(listPets(searchKeyword, page, false));
+            dispatch(listPets(searchKeyword, page, true));
         }, [dispatch])
     );
 
@@ -60,7 +60,7 @@ const SearchScreen = ({ navigation, route }) => {
                 <Paginate
                     pages={pages}
                     page={page}
-                    onPageChange={(selectedPage) => dispatch(listPets("", selectedPage))}
+                    onPageChange={(selectedPage) => dispatch(listPets("", selectedPage, true))}
                 />
             )}
         </View>
