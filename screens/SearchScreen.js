@@ -5,6 +5,8 @@ import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import Pet from '../components/Pet';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Paginate from '../components/Paginate';
+
 import styles from './styles/SearchStyles';
 import { listPets } from '../store/actions/petActions';
 import { useColorSchemeContext } from '../ColorSchemeContext';
@@ -23,7 +25,7 @@ const SearchScreen = ({ navigation, route }) => {
     useFocusEffect(
         React.useCallback(() => {
             dispatch(listPets(searchKeyword, page, false));
-        }, [dispatch, searchKeyword])
+        }, [dispatch])
     );
 
     const renderItem = ({ item }) => (
@@ -47,12 +49,19 @@ const SearchScreen = ({ navigation, route }) => {
                             renderItem={renderItem}
                             keyExtractor={(item) => item._id.toString()}
                             contentContainerStyle={styles.petList}
-                            numColumns={2}
+                            numColumns={1}
                         />
                     ) : (
                         <Message variant="danger">No se encontró ninguna mascota relacionada con su búsqueda</Message>
                     )
                 )
+            )}
+            {!loading && pets && pets.length > 0 && (
+                <Paginate
+                    pages={pages}
+                    page={page}
+                    onPageChange={(selectedPage) => dispatch(listPets("", selectedPage))}
+                />
             )}
         </View>
     );
