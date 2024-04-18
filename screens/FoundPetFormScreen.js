@@ -14,6 +14,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { validateEmail } from '../functions/functions';
 import Loader from '../components/Loader';
+import useAndroidBackButton from '../myHooks/useAndroidBackButton';
 
 function FoundPetFormScreen({ navigation }) {
     const [emailValid, setEmailValid] = useState(true);
@@ -25,6 +26,7 @@ function FoundPetFormScreen({ navigation }) {
     const [images, setImages] = useState([]);
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
+    useAndroidBackButton(navigation);
 
     //Funcion para seleccionar imagenes
     const handleSelectImages = () => {

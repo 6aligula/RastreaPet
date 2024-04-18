@@ -1,12 +1,11 @@
 // Pet.js
 import React from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import Rating from './Rating';
 import styles from './styles/PetStyle';
-import CarouselComponent from './Carousel';
 import { useColorSchemeContext } from '../ColorSchemeContext';
 
-const Pet = ({ pet, onDetailsPress }) => {
+const Pet = ({ pet }) => {
   const { stylesGlobal } = useColorSchemeContext();
   return (
     <View style={[stylesGlobal.background, styles.row]}>
@@ -24,9 +23,6 @@ const Pet = ({ pet, onDetailsPress }) => {
       <Rating value={pet.rating} />
       <Text style={stylesGlobal.text}>{`${pet.numTrail} Pista`}</Text>
 
-      {/* <TouchableOpacity onPress={onDetailsPress} style={styles.detailsButton}>
-        <Text style={styles.detailsButtonText}>Ver detalles</Text>
-      </TouchableOpacity> */}
     </View>
   );
 };
