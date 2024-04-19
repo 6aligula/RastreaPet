@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { combineReducers } from 'redux';
+import { persistReducer} from 'redux-persist';
 import {
     petListReducers,
     petDetailsReducers,
@@ -12,12 +13,6 @@ import {
     userDetailsReducer,
     userUpdateProfileReducer,
 } from './userReducers';
-import {
-    orderCreateReducer,
-    orderDetailsReducer,
-    orderListMyReducer,
-} from './orderReducer';
-import { persistReducer} from 'redux-persist';
 
 const petListPersistConfig = {
     key: 'petList',
@@ -37,15 +32,6 @@ const userPersistConfig = {
     whitelist: ['userInfo', 'userDetails']
 };
 
-// AsyncStorage.getAllKeys((err, keys) => {
-//     AsyncStorage.multiGet(keys, (error, stores) => {
-//         stores.map((result, i, store) => {
-//             console.log({ [store[i][0]]: store[i][1] });
-//             return true;
-//         });
-//     });
-// });
-
 const rootReducer = combineReducers({
     petList: persistReducer(petListPersistConfig, petListReducers),
     petDetails: persistReducer(petDetailsPersistConfig, petDetailsReducers),
@@ -54,9 +40,6 @@ const rootReducer = combineReducers({
     userRegister: userRegisterReducer,
     userDetails: userDetailsReducer,
     userUpdateProfile : userUpdateProfileReducer,
-    orderCreate: orderCreateReducer,
-    orderDetails: orderDetailsReducer,
-    orderListMy: orderListMyReducer,
 });
 
 export default rootReducer;

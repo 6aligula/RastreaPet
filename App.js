@@ -10,8 +10,6 @@ import SearchScreen from './screens/SearchScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
-import MyOrdersScreen from './screens/MyOrdersScreen';
-import OrderScreen from './screens/OrderScreen';
 import FormScreen from './screens/FormScreen';
 import FoundPetFormScreen from './screens/FoundPetFormScreen';
 import FoundPetScreen from './screens/FoundPetScreen';
@@ -69,20 +67,6 @@ const App = () => {
                 <Stack.Screen
                   name="ProfileScreen"
                   component={ProfileScreen}
-                  options={({ navigation }) => ({
-                    header: () => <CustomHeader navigation={navigation} />,
-                  })}
-                />
-                <Stack.Screen
-                  name="MyOrdersScreen"
-                  component={MyOrdersScreen}
-                  options={({ navigation }) => ({
-                    header: () => <CustomHeader navigation={navigation} />,
-                  })}
-                />
-                <Stack.Screen
-                  name="OrderScreen"
-                  component={OrderScreen}
                   options={({ navigation }) => ({
                     header: () => <CustomHeader navigation={navigation} />,
                   })}
