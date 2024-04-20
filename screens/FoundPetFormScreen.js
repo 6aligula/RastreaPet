@@ -11,6 +11,7 @@ import useLocationPermissions from '../myHooks/useLocationPermissions';
 import Message from '../components/Message';
 import styles from './styles/FoundPetFormScreenStyle';
 import { launchImageLibrary } from 'react-native-image-picker';
+import ImageResizer from 'react-native-image-resizer';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { validateEmail } from '../functions/functions';
 import Loader from '../components/Loader';
@@ -23,11 +24,32 @@ function FoundPetFormScreen({ navigation }) {
     const { requestLocationPermission } = useLocationPermissions();
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState('info'); // 'info' o 'danger'    
+    const [messageImage, setMessageImage] = useState('');
+    const [messageTypeImage, setMessageTypeImage] = useState('info'); // 'info' o 'danger'    
     const [images, setImages] = useState([]);
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     useAndroidBackButton(navigation);
 
+    // Función para redimensionar una imagen
+    const resizeImage = async (imageUri) => {
+        const compressFormat = Platform.OS === 'android' ? 'WEBP' : 'JPEG'; // Usar WebP para Android y JPEG para iOS
+        try {
+            const resizedImage = await ImageResizer.createResizedImage(
+                imageUri,
+                800, // ancho deseado
+                600, // alto deseado
+                compressFormat, // formato de compresión
+                80, // calidad
+            );
+            return resizedImage;
+        } catch (err) {
+            console.error('Error al redimensionar la imagen:', err);
+            setMessageImage('Error al redimensionar la imagen');
+            setMessageTypeImage('error');
+            return null;
+        }
+    };
     //Funcion para seleccionar imagenes
     const handleSelectImages = () => {
         const options = {
@@ -36,18 +58,26 @@ function FoundPetFormScreen({ navigation }) {
             selectionLimit: 0,  // 0 para múltiples selecciones
         };
 
-        launchImageLibrary(options, (response) => {
+        launchImageLibrary(options, async (response) => {
             if (response.didCancel) {
                 console.log('User cancelled image picker');
+                setMessageImage('User cancelled image picker');
+                setMessageTypeImage('info');
             } else if (response.errorCode) {
                 console.log('ImagePicker Error: ', response.errorMessage);
+                setMessageImage('ImagePicker', response.errorMessage);
+                setMessageTypeImage('error');
+                
             } else {
-                const newImages = response.assets.map(asset => ({
-                    uri: asset.uri,
-                    type: asset.type,
-                    name: asset.fileName
+                const resizedImages = await Promise.all(response.assets.map(async (asset) => {
+                    const resized = await resizeImage(asset.uri);
+                    return {
+                        uri: resized.uri,
+                        type: asset.type,
+                        name: asset.fileName
+                    };
                 }));
-                setImages(prevImages => [...prevImages, ...newImages]);
+                setImages(prevImages => [...prevImages, ...resizedImages]);
             }
         });
     };
@@ -129,14 +159,19 @@ function FoundPetFormScreen({ navigation }) {
             mediaType: 'photo',
         };
 
-        launchCamera(options, (response) => {
+        launchCamera(options, async (response) => {
             if (response.didCancel) {
                 console.log('El usuario canceló la toma de foto');
+                setMessageImage('El usuario canceló la toma de foto');
+                setMessageTypeImage('info');
             } else if (response.error) {
                 console.log('Error de ImagePicker: ', response.error);
+                setMessageImage('Error de ImagePicker', response.error);
+                setMessageTypeImage('error');
             } else {
+                const resizedImage = await resizeImage(response.assets[0].uri);
                 const newImage = {
-                    uri: response.assets[0].uri,
+                    uri: resizedImage.uri,
                     type: response.assets[0].type,
                     name: response.assets[0].fileName
                 };
@@ -187,6 +222,9 @@ function FoundPetFormScreen({ navigation }) {
                             <Button title="Abrir Cámara" onPress={openCameraWithPermission} />
                         </View>
                     </View>
+                    {messageImage && (
+                        <Message variant={messageTypeImage}>{messageImage}</Message>
+                    )}
 
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                         {images.map((image, index) => (
