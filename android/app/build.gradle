@@ -102,6 +102,16 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+
+
+    afterEvaluate {
+        tasks.named('lintVitalReportRelease') {
+            dependsOn(':app:copyReactNativeVectorIconFonts')
+        }
+        tasks.named('lintVitalAnalyzeRelease') {
+            dependsOn(':app:copyReactNativeVectorIconFonts')
+        }
+    }
 }
 
 dependencies {
