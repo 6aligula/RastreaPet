@@ -14,4 +14,18 @@ Antes de proceder a añadir nuevas funcionalidades o dependencias, es ideal limp
 
 # Instalar @bam.tech/react-native-make:
 
+```bash
+npm install --save-dev @bam.tech/react-native-make
+```
 Una vez que has asegurado que tu entorno está limpio y seguro, puedes proceder a instalar nuevas dependencias. En este caso, @bam.tech/react-native-make te ayudará a manejar los recursos gráficos de tu aplicación de React Native más eficientemente. Usar --save-dev es adecuado ya que esta herramienta solo es necesaria durante el desarrollo y no en el entorno de producción:
+
+Generar los íconos: Una vez instalada, puedes usar el comando específico para generar íconos de mipmap. Por ejemplo:
+
+```bash
+npx react-native set-icon --path path_to_your_icon.png
+```
+Con las imagenes creadas podemos desinstalar la herramienta:
+
+```bash
+npm uninstall --save-dev @bam.tech/react-native-make
+```
