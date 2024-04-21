@@ -29,3 +29,50 @@ Con las imagenes creadas podemos desinstalar la herramienta:
 ```bash
 npm uninstall --save-dev @bam.tech/react-native-make
 ```
+
+cambiar el nombre a la app:
+
+# crear el almacen de claves:
+```bash
+keytool -genkeypair -v -storetype PKCS12 -keystore my-upload-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
+```
+
+
+# Configura las variables de Gradle:
+* Añade las siguientes líneas en android/gradle.properties o ~/.gradle/gradle.properties
+
+```bash
+MYAPP_UPLOAD_STORE_FILE=my-upload-key.keystore
+MYAPP_UPLOAD_KEY_ALIAS=my-key-alias
+MYAPP_UPLOAD_STORE_PASSWORD=your_keystore_password
+MYAPP_UPLOAD_KEY_PASSWORD=your_key_password
+```
+
+
+# Configura la firma en android/app/build.gradle:
+* Añade la siguiente configuración
+```bash
+android {
+    ...
+    signingConfigs {
+        release {
+            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+                storeFile file(MYAPP_UPLOAD_STORE_FILE)
+                storePassword MYAPP_UPLOAD_STORE_PASSWORD
+                keyAlias MYAPP_UPLOAD_KEY_ALIAS
+                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+            }
+        }
+    }
+    buildTypes {
+        release {
+            ...
+            signingConfig signingConfigs.release
+        }
+    }
+}
+```
+# Crear el bundle
+
+cd android
+./gradlew bundleRelease
