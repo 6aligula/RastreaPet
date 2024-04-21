@@ -1,5 +1,3 @@
-//useLocationPermissions.js
-
 import { useCallback } from 'react';
 import { PermissionsAndroid } from 'react-native';
 

@@ -1,4 +1,3 @@
-// myHooks/useCameraPermissions.js
 import { useCallback } from 'react';
 import { PermissionsAndroid } from 'react-native';
 
@@ -15,10 +14,10 @@ const useCameraPermissions = () => {
             buttonPositive: "Aceptar"
           }
         );
-        return granted === PermissionsAndroid.RESULTS.GRANTED; // Devolver directamente el resultado
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
       } catch (err) {
         console.warn(err);
-        return false; // Devolver false en caso de error
+        return false;
       }
     }, []);
   

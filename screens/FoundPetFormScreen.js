@@ -23,48 +23,44 @@ function FoundPetFormScreen({ navigation }) {
     const { requestCameraPermission } = useCameraPermissions();
     const { requestLocationPermission } = useLocationPermissions();
     const [message, setMessage] = useState('');
-    const [messageType, setMessageType] = useState('info'); // 'info' o 'danger'    
+    const [messageType, setMessageType] = useState('info');    
     const [messageImage, setMessageImage] = useState('');
-    const [messageTypeImage, setMessageTypeImage] = useState('info'); // 'info' o 'danger'    
+    const [messageTypeImage, setMessageTypeImage] = useState('info');  
     const [images, setImages] = useState([]);
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     useAndroidBackButton(navigation);
 
-    // Función para redimensionar una imagen
     const resizeImage = async (imageUri) => {
-        const compressFormat = Platform.OS === 'android' ? 'WEBP' : 'JPEG'; // Usar WebP para Android y JPEG para iOS
+        const compressFormat = Platform.OS === 'android' ? 'WEBP' : 'JPEG';
         try {
             const resizedImage = await ImageResizer.createResizedImage(
                 imageUri,
-                800, // ancho deseado
-                600, // alto deseado
-                compressFormat, // formato de compresión
-                80, // calidad
+                800,
+                600,
+                compressFormat,
+                80,
             );
             return resizedImage;
         } catch (err) {
-            console.error('Error al redimensionar la imagen:', err);
             setMessageImage('Error al redimensionar la imagen');
             setMessageTypeImage('error');
             return null;
         }
     };
-    //Funcion para seleccionar imagenes
+
     const handleSelectImages = () => {
         const options = {
             mediaType: 'photo',
             quality: 1,
-            selectionLimit: 0,  // 0 para múltiples selecciones
+            selectionLimit: 0,
         };
 
         launchImageLibrary(options, async (response) => {
             if (response.didCancel) {
-                console.log('User cancelled image picker');
                 setMessageImage('User cancelled image picker');
                 setMessageTypeImage('info');
             } else if (response.errorCode) {
-                console.log('ImagePicker Error: ', response.errorMessage);
                 setMessageImage('ImagePicker', response.errorMessage);
                 setMessageTypeImage('error');
                 
@@ -82,23 +78,19 @@ function FoundPetFormScreen({ navigation }) {
         });
     };
 
-    // Función para abrir la cámara con permisos
     const openCameraWithPermission = async () => {
         const hasPermission = await requestCameraPermission();
         if (hasPermission) {
             try {
-                openCamera(); // Manejar sus propios errores como ya estás haciendo
+                openCamera();
             } catch (error) {
-                console.error("Error al abrir la cámara:", error);
                 setErrorCameraPermission(true);
             }
         } else {
             setErrorCameraPermission(true);
-            console.log('No se otorgaron los permisos para la cámara');
         }
     };
 
-    // Función para obtener la ubicación automáticamente
     const getLocation = async () => {
         const hasPermission = await requestLocationPermission();
         if (hasPermission) {
@@ -122,22 +114,18 @@ function FoundPetFormScreen({ navigation }) {
                             setFormData(prev => ({ ...prev, address: address }));
                             setMessage('Ubicación correcta, no olvides añadir el número de la calle.');
                             setMessageType('info');
-                            console.log('Dirección obtenida:', address);
                         } else {
-                            console.log('Geocodificación falló:', data.error);
                             setMessage('Error al realizar la geocodificación.');
                             setMessageType('danger');
                         }
                     } catch (error) {
-                        console.error('Error al realizar la geocodificación:', error);
                         setMessage('Error al realizar la geocodificación 2.');
                         setMessageType('danger');
                     }finally {
-                        setLoading(false); // Desactiva el loader independientemente del resultado
+                        setLoading(false);
                     }
                 },
                 (error) => {
-                    console.error('Error obteniendo la localización:', error);
                     setMessage('Error al obtener la ubicación.');
                     setMessageType('danger');
                     setLoading(false);
@@ -150,8 +138,6 @@ function FoundPetFormScreen({ navigation }) {
             setLoading(false);
         }
     };
-    
-    
 
     const openCamera = () => {
         const options = {
@@ -161,11 +147,9 @@ function FoundPetFormScreen({ navigation }) {
 
         launchCamera(options, async (response) => {
             if (response.didCancel) {
-                console.log('El usuario canceló la toma de foto');
                 setMessageImage('El usuario canceló la toma de foto');
                 setMessageTypeImage('info');
             } else if (response.error) {
-                console.log('Error de ImagePicker: ', response.error);
                 setMessageImage('Error de ImagePicker', response.error);
                 setMessageTypeImage('error');
             } else {
@@ -197,7 +181,6 @@ function FoundPetFormScreen({ navigation }) {
     });
 
     const handleSubmit = () => {
-        console.log("data", formData)
         dispatch(createPetFound(formData, images));
         navigation.navigate('HomeScreen');
         return;

@@ -38,11 +38,11 @@ const ShippingStyles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center',
-        marginHorizontal: 20, // Ajusta según necesites
+        marginHorizontal: 20,
     },
     roundedButton: {
-        flex: 1, // Esto hace que cada botón tome el mismo espacio disponible
-        marginHorizontal: 10, // Añade un margen horizontal para separar los botones
+        flex: 1,
+        marginHorizontal: 10,
         borderRadius: 50,
         overflow: 'hidden',
     },
@@ -61,9 +61,8 @@ const ShippingStyles = StyleSheet.create({
         color: '#2c3e50',
         textAlign: 'center',
     }, 
-    // Estilos para el boton de eliminar las imagenes  
     imagePreviewContainer: {
-        position: 'relative', // Esto permite posicionar el botón de eliminar absolutamente
+        position: 'relative',
         padding: 5,
     },
     imagePreview: {

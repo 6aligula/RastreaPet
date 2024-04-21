@@ -1,4 +1,3 @@
-//ProductStyle.js
 import { StyleSheet, Dimensions } from 'react-native';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height; 
@@ -15,8 +14,8 @@ const styles = StyleSheet.create({
     },
 
     imageContainer: {
-        width: screenWidth -10,  // Usamos el ancho completo de la pantalla
-        height: screenHeight / 3,  // Establecemos una altura proporcional, como 1/3 de la altura de la pantalla
+        width: screenWidth -10,
+        height: screenHeight / 3,
         overflow: 'hidden',
         borderTopLeftRadius: 4,
         borderTopRightRadius: 4,

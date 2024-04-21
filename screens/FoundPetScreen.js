@@ -36,7 +36,6 @@ const FounPetScreen = ({ navigation }) => {
         setIsConnected(state.isConnected);
         if (state.isConnected) {
           dispatch(listPets('', 1, false));
-          console.log("peticion enviada al server");
         }
 
       };

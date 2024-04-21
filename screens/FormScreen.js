@@ -29,25 +29,23 @@ function FormScreen({ navigation }) {
 
     const [date, setDate] = useState(new Date());
     const [show, setShow] = useState(false);
-    const formattedDate = date.toLocaleDateString('es-ES');  // Formato de fecha local 'dd/mm/yyyy'
+    const formattedDate = date.toLocaleDateString('es-ES');
     const [images, setImages] = useState([]);
     const [messageImage, setMessageImage] = useState('');
-    const [messageTypeImage, setMessageTypeImage] = useState('info'); // 'info' o 'danger'  
+    const [messageTypeImage, setMessageTypeImage] = useState('info');
 
-    // Función para redimensionar una imagen
     const resizeImage = async (imageUri) => {
-        const compressFormat = Platform.OS === 'android' ? 'WEBP' : 'JPEG'; // Usar WebP para Android y JPEG para iOS
+        const compressFormat = Platform.OS === 'android' ? 'WEBP' : 'JPEG';
         try {
             const resizedImage = await ImageResizer.createResizedImage(
                 imageUri,
-                800, // ancho deseado
-                600, // alto deseado
-                compressFormat, // formato de compresión
-                80, // calidad
+                800, 
+                600,
+                compressFormat,
+                80,
             );
             return resizedImage;
         } catch (err) {
-            console.error('Error al redimensionar la imagen:', err);
             setMessageImage('Error al redimensionar la imagen');
             setMessageTypeImage('error');
             return null;
@@ -58,16 +56,14 @@ function FormScreen({ navigation }) {
         const options = {
             mediaType: 'photo',
             quality: 1,
-            selectionLimit: 0,  // 0 para múltiples selecciones
+            selectionLimit: 0,
         };
     
         launchImageLibrary(options, async (response) => {
             if (response.didCancel) {
-                console.log('User cancelled image picker');
                 setMessageImage('User cancelled image picker');
                 setMessageTypeImage('info');
             } else if (response.errorCode) {
-                console.log('ImagePicker Error: ', response.errorMessage);
                 setMessageImage('ImagePicker', response.errorMessage);
                 setMessageTypeImage('error');
             } else {
@@ -88,7 +84,7 @@ function FormScreen({ navigation }) {
         const currentDate = selectedDate || date;
         setShow(false);
         setDate(currentDate);
-        setFormData(prev => ({ ...prev, missingDate: currentDate.toISOString().split('T')[0] })); // Guarda la fecha en formato YYYY-MM-DD
+        setFormData(prev => ({ ...prev, missingDate: currentDate.toISOString().split('T')[0] }));
     };
 
     const showDatepicker = () => {
@@ -155,7 +151,6 @@ function FormScreen({ navigation }) {
 
     const handleSubmit = () => {
         if (validateFields()) {
-            console.log("data", formData)
             dispatch(createPet(formData, images));
             navigation.navigate('HomeScreen');
             return;

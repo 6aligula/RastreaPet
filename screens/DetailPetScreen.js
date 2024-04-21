@@ -30,7 +30,6 @@ function DetailProductScreen({ navigation, route }) {
       setIsConnected(state.isConnected);
       if (state.isConnected) {
         dispatch(listPetDetails(petId));
-        //console.log("Conectado a internet?", state.isConnected);
       }
 
     };

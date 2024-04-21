@@ -18,16 +18,12 @@ import {
 } from '../constants/petConstants';
 
 export const listPets = (keyword = '', page = 1, missing= false) => async (dispatch) => {
-    //console.log("ip: ", Config.API_BASE_URL);
     try {
         dispatch({ type: PET_LIST_REQUEST })
         const url = `${Config.API_BASE_URL}/api/pets/?${keyword ? `keyword=${keyword}&` : ''}page=${page}&missing=${missing}`;
-        //console.log("URL de la solicitud:", url);
 
         const { data } = await axios.get(url);
-        //console.log("Datos recibidos:", data);
 
-        // Corrección en la transformación de imágenes: Asumiendo que cada producto tiene un array de imágenes
         const petsWithFullImageURL = data.pets.map(pet => ({
             ...pet,
             images: pet.images.map(image => ({
@@ -35,8 +31,6 @@ export const listPets = (keyword = '', page = 1, missing= false) => async (dispa
                 image: `${Config.API_BASE_URL}${image.image}`
             }))
         }));
-
-        //console.log("Productos con URLs de imágenes completas:", productsWithFullImageURL); // Log del nuevo array de productos
 
         dispatch({
             type: PET_LIST_SUCCESS,
@@ -46,7 +40,6 @@ export const listPets = (keyword = '', page = 1, missing= false) => async (dispa
             }
         })
     } catch (error) {
-        //console.error("Error en listProducts:", error); // Log de cualquier error que ocurra durante la solicitud o transformación de datos
         dispatch({
             type: PET_LIST_FAIL,
             payload: error.response && error.response.data.detail
@@ -62,7 +55,6 @@ export const listPetDetails = (id) => async (dispatch) => {
 
         const { data } = await axios.get(`${Config.API_BASE_URL}/api/pets/${id}/`);
 
-        // Asumimos que cada producto tiene un array de imágenes y agregamos la URL completa
         const petWithFullImageURL = {
             ...data,
             images: data.images.map(image => ({
@@ -94,7 +86,6 @@ export const createPet = (formData, images) => async (dispatch, getState) => {
             userLogin: { userInfo },
         } = getState();
 
-        // Configuración de cabeceras para datos de formulario
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -102,24 +93,18 @@ export const createPet = (formData, images) => async (dispatch, getState) => {
             }
         };
 
-        // Crear instancia de FormData y añadir datos del formulario
         const petFormData = new FormData();
         Object.keys(formData).forEach(key => {
             petFormData.append(key, formData[key]);
         });
 
-        // Añadir imágenes al FormData
         images.forEach((image, index) => {
             petFormData.append('images', {
                 uri: image.uri,
                 type: image.type,
-                name: `image${index}.jpg`  // Asegúrate de que el nombre sea único y adecuado
+                name: `image${index}.jpg`
             });
         });
-
-        //console.log("Enviando solicitud de creación de mascota con los siguientes datos:", formData);
-        //console.log("Con las siguientes imágenes:", images);
-        //console.log("Headers de configuración:", config.headers);
 
         const { data } = await axios.post(
             `${Config.API_BASE_URL}/api/pets/create/`,
@@ -133,7 +118,6 @@ export const createPet = (formData, images) => async (dispatch, getState) => {
         });
 
     } catch (error) {
-        console.error("Error al crear la mascota:", error);
         dispatch({
             type: PET_CREATE_FAIL,
             payload: error.response && error.response.data.detail
@@ -146,31 +130,24 @@ export const createPet = (formData, images) => async (dispatch, getState) => {
 export const createPetFound = (formData, images) => async (dispatch) => {
     try {
         dispatch({ type: PET_CREATE_REQUEST });
-        // Configuración de cabeceras para datos de formulario
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data',
             }
         };
 
-        // Crear instancia de FormData y añadir datos del formulario
         const petFormData = new FormData();
         Object.keys(formData).forEach(key => {
             petFormData.append(key, formData[key]);
         });
 
-        // Añadir imágenes al FormData
         images.forEach((image, index) => {
             petFormData.append('images', {
                 uri: image.uri,
                 type: image.type,
-                name: `image${index}.jpg`  // Asegúrate de que el nombre sea único y adecuado
+                name: `image${index}.jpg`
             });
         });
-
-        //console.log("Enviando solicitud de creación de mascota con los siguientes datos:", formData);
-        //console.log("Con las siguientes imágenes:", images);
-        //console.log("Headers de configuración:", config.headers);
 
         const { data } = await axios.post(
             `${Config.API_BASE_URL}/api/pets/create/found/`,
@@ -184,7 +161,6 @@ export const createPetFound = (formData, images) => async (dispatch) => {
         });
 
     } catch (error) {
-        console.error("Error al crear la mascota:", error);
         dispatch({
             type: PET_CREATE_FAIL,
             payload: error.response && error.response.data.detail

@@ -13,7 +13,6 @@ const CustomHeader = ({ locationHome, navigation, currentScreen }) => {
     const DEFAULT_COLOR = '#FFFFFF';
     const ACTIVE_COLOR = '#FF00FF';
 
-    // Función auxiliar para obtener el color basado en la pantalla
     const getIconColor = (screenName) => currentScreen === screenName ? ACTIVE_COLOR : DEFAULT_COLOR;
 
     return (

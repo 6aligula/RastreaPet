@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         resizeMode: 'contain',
-        borderRadius: 5,  // Bordes redondeados
-        shadowColor: '#000',  // Sombra para elevación
+        borderRadius: 5,
+        shadowColor: '#000',
     },
     loginButton: {
         flexDirection: 'row',
