@@ -34,18 +34,17 @@ cambiar el nombre a la app:
 
 # crear el almacen de claves:
 ```bash
-keytool -genkeypair -v -storetype PKCS12 -keystore my-upload-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
+keytool -genkeypair -v -storetype PKCS12 -keystore my-upload-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000 -storepass passwordsegura -keypass passwordsegura
 ```
 
-
 # Configura las variables de Gradle:
-* Añade las siguientes líneas en android/gradle.properties o ~/.gradle/gradle.properties
+* Añade las siguientes líneas en android/gradle.properties o ~/.gradle/gradle.properties (Parece opcional)
 
 ```bash
-MYAPP_UPLOAD_STORE_FILE=my-upload-key.keystore
-MYAPP_UPLOAD_KEY_ALIAS=my-key-alias
-MYAPP_UPLOAD_STORE_PASSWORD=your_keystore_password
-MYAPP_UPLOAD_KEY_PASSWORD=your_key_password
+MYAPP_UPLOAD_STORE_FILE=System.getenv('MYAPP_UPLOAD_STORE_FILE')
+MYAPP_UPLOAD_KEY_ALIAS=System.getenv('MYAPP_UPLOAD_KEY_ALIAS')
+MYAPP_UPLOAD_STORE_PASSWORD=System.getenv('MYAPP_UPLOAD_STORE_PASSWORD')
+MYAPP_UPLOAD_KEY_PASSWORD=System.getenv('MYAPP_UPLOAD_KEY_PASSWORD')
 ```
 
 
